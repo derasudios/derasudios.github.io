@@ -4,6 +4,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AKU NI RUOK</title>
 </head>
+<script>
+    var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+  if (!isChrome){
+      $('#iframeAudio').remove()
+  }
+  else {
+      $('#playAudio').remove() // just to make sure that it will not have 2x audio in the background 
+  }
+  </script>
 <body>
 <body style="background-color:black;">
 <center> <h1 style="font-family:courier;color:red;">AKU NI RUOK LAAA</h1> </center>
@@ -13,5 +22,9 @@
 <span>a</span>
 <center><<h1 style=font-family:courier;color:red;">HELL NAW</h1></center>
 </body>
-<audio autoplay controls loop hidden> <source src="https://github.com/derasudios/Me/raw/c87a7fe375ebb4f8b27117fa953109011fcfd308/AUD-20240703-WA0008.mp3"></audio>
+<iframe src="https://github.com/derasudios/Me/raw/c87a7fe375ebb4f8b27117fa953109011fcfd308/AUD-20240703-WA0008.mp3" allow="autoplay" style="display:none" id="iframeAudio">
+</iframe> 
+<audio autoplay loop hidden id="playAudio">
+    <source src="https://github.com/derasudios/Me/raw/c87a7fe375ebb4f8b27117fa953109011fcfd308/AUD-20240703-WA0008.mp3">
+</audio>
 </html>
