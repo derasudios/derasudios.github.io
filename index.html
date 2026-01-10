@@ -1,25 +1,149 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AKU NI RUOK</title>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love You Bei!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+            overflow: hidden;
+            color: white;
+        }
+
+        /* Modern Heart Background */
+        .heart-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .floating-heart {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            width: 20px;
+            height: 20px;
+            transform: rotate(45deg);
+            animation: float 10s infinite linear;
+            border-radius: 0 0 5px 0;
+        }
+
+        .floating-heart::before, .floating-heart::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: 50%;
+        }
+
+        .floating-heart::before { top: -50%; left: 0; }
+        .floating-heart::after { left: -50%; top: 0; }
+
+        @keyframes float {
+            0% { transform: translateY(110vh) rotate(45deg) scale(0.5); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) rotate(45deg) scale(1.2); opacity: 0; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            animation: glow 2s infinite alternate;
+        }
+
+        p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #fff, 0 0 20px #ff7eb3; }
+            to { text-shadow: 0 0 20px #fff, 0 0 30px #ff758c; }
+        }
+
+        /* Hide YouTube Player but keep audio */
+        #youtube-player {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
-</head>
-<body>
-       <audio controls autoplay loop hidden>
-        <source src=
-"https://github.com/derasudios/Me/raw/c87a7fe375ebb4f8b27117fa953109011fcfd308/AUD-20240703-WA0008.mp3"
-                type="audio/mpeg">
-    </audio>
-<body style="background-color:black;">
-<center> <h1 style="font-family:courier;color:red;">AKU NI RUOK LAAA</h1> </center>
-<span>a</span>
-<center> <img src="https://i.ibb.co.com/0C2qHb3/gentleman-giga-chad-1.gif" width="300" height="300" alt="mensigma raga"></img> </center>
-<center> <p style="font-family:courier;color:white;">ZANN.DZ</p> </center>
-<span>a</span>
-<center><<h1 style=font-family:courier;color:red;">HELL NAW</h1></center>
+    <div class="heart-bg" id="heartContainer"></div>
+
+    <div class="container">
+        <h1>Love You Bei!</h1>
+        <p>Sudilah kau temani diriku...</p>
+        <p style="font-size: 0.8rem; margin-top: 20px;">🎶 Playing: Payung Teduh - Akad</p>
+    </div>
+
+    <div id="youtube-player"></div>
+
+    <script>
+        // Heart Generator
+        function createHeart() {
+            const container = document.getElementById('heartContainer');
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            heart.style.opacity = Math.random();
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), 10000);
+        }
+        setInterval(createHeart, 400);
+
+        // YouTube IFrame API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0',
+                width: '0',
+                videoId: 'viW0M5R2BLo', // Video ID from Payung Teduh - Akad
+                playerVars: {
+                    'autoplay': 1,
+                    'loop': 1,
+                    'playlist': 'viW0M5R2BLo'
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            event.target.playVideo();
+        }
+    </script>
 </body>
 </html>
