@@ -18,7 +18,6 @@
     display: flex; justify-content: center; align-items: center;
     padding: 12px; overflow-x: hidden;
   }
-
   @keyframes gradientShift {
     0%, 100% { background-position: 0% 50%; }
     50%      { background-position: 100% 50%; }
@@ -27,12 +26,10 @@
   .app {
     width: 100%; max-width: 480px;
     background: rgba(255, 255, 255, 0.94);
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     border-radius: 28px; padding: 20px;
-    box-shadow:
-      0 30px 80px rgba(162, 155, 254, 0.4),
-      0 10px 30px rgba(255, 179, 217, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    box-shadow: 0 30px 80px rgba(162, 155, 254, 0.4),
+                0 10px 30px rgba(255, 179, 217, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.6);
   }
 
@@ -42,8 +39,7 @@
     background: linear-gradient(135deg, #ff5c9c, #c8a2ff, #74b9ff);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text;
-    display: flex; align-items: center; justify-content: center;
-    gap: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
   }
   .header p { font-size: 0.75rem; color: #888; margin-top: 3px; }
 
@@ -102,7 +98,6 @@
   .mode-btn.active {
     background: linear-gradient(135deg, #ff5c9c, #c8a2ff);
     color: #fff;
-    box-shadow: 0 8px 20px rgba(255, 92, 156, 0.4);
   }
 
   .camera-box {
@@ -112,7 +107,6 @@
     margin-bottom: 12px;
   }
 
-  /* PREVIEW mirror (nyaman dilihat user) */
   #video {
     width: 100%; height: 100%; object-fit: cover; display: block;
     transform: scaleX(-1);
@@ -160,7 +154,6 @@
     background: linear-gradient(135deg, #ff5c9c, #c8a2ff);
     color: #fff; border: none; border-radius: 30px;
     font-size: 0.85rem; font-weight: 700; cursor: pointer;
-    box-shadow: 0 10px 25px rgba(255, 92, 156, 0.4);
   }
 
   .camera-error {
@@ -207,14 +200,13 @@
     transform: translateX(-50%); display: flex; gap: 8px;
     z-index: 8; background: rgba(0, 0, 0, 0.4);
     padding: 8px 16px; border-radius: 20px;
-    backdrop-filter: blur(10px);
   }
   .dot {
     width: 8px; height: 8px; border-radius: 50%;
     background: rgba(255, 255, 255, 0.4); transition: all 0.3s;
   }
-  .dot.active { background: #fff; transform: scale(1.4); box-shadow: 0 0 12px rgba(255, 255, 255, 0.9); }
-  .dot.done { background: #ff5c9c; box-shadow: 0 0 12px rgba(255, 92, 156, 0.9); }
+  .dot.active { background: #fff; transform: scale(1.4); }
+  .dot.done { background: #ff5c9c; }
 
   .section-title {
     font-size: 0.78rem; font-weight: 700; color: #666;
@@ -229,7 +221,7 @@
   .frames-scroll {
     display: flex; gap: 10px; overflow-x: auto;
     padding: 6px 2px 14px;
-    scrollbar-width: thin; scrollbar-color: #ff5c9c transparent;
+    scrollbar-width: thin;
   }
   .frames-scroll::-webkit-scrollbar { height: 5px; }
   .frames-scroll::-webkit-scrollbar-thumb {
@@ -241,11 +233,10 @@
     min-width: 86px; height: 114px;
     border-radius: 16px; cursor: pointer;
     position: relative; overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.3s;
     flex-shrink: 0;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   }
-  .frame-item:hover { transform: translateY(-5px) scale(1.02); }
   .frame-item.selected {
     transform: scale(1.08);
     box-shadow: 0 12px 30px rgba(255, 92, 156, 0.55);
@@ -258,7 +249,6 @@
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 0.75rem; font-weight: 900;
-    box-shadow: 0 4px 10px rgba(255, 92, 156, 0.6);
     z-index: 3;
   }
   .frame-item .frame-inner {
@@ -269,9 +259,7 @@
     padding: 6px 4px;
   }
   .frame-item .frame-icon {
-    font-size: 1.1rem; margin-bottom: 3px;
-    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
-    z-index: 2;
+    font-size: 1.1rem; margin-bottom: 3px; z-index: 2;
   }
   .frame-item .mini-grid {
     display: grid; grid-template-columns: 1fr 1fr;
@@ -299,7 +287,7 @@
 
   .actions { display: flex; gap: 10px; margin-top: 8px; }
   .btn {
-    flex: 1; padding: 14px 14px;
+    flex: 1; padding: 14px;
     border: none; border-radius: 16px;
     font-size: 0.88rem; font-weight: 700;
     cursor: pointer; transition: all 0.2s;
@@ -520,10 +508,9 @@ const FRAMES = [
    ⚙️ STATE
    ============================================================ */
 let stream = null;
-let currentMode = 'solo';
 let selectedFrame = FRAMES[0];
-let capturedPhotos = [];       // Image[] foto sendiri
-let capturedRemotePhotos = []; // { dataUrl, index }[] foto teman
+let capturedPhotos = [];
+let capturedRemotePhotos = [];
 let isCapturing = false;
 let currentLocation = null;
 let photoCount = 0, videoCount = 0;
@@ -531,10 +518,10 @@ let photoCount = 0, videoCount = 0;
 let peer = null, conn = null, remoteCall = null;
 let isHost = false, roomCode = '', hostPeerId = '', clientPeerId = '';
 let connectionAttempts = 0;
-
-// 🎯 FLAG: apakah kita sudah dapat signal 'capture-complete' dari peer
 let peerCaptureComplete = false;
 let myCaptureComplete = false;
+let peerReady = false;
+let connected = false;
 
 const video = document.getElementById('video');
 const remoteVideo = document.getElementById('remoteVideo');
@@ -632,6 +619,7 @@ async function startCamera() {
     });
 
     getLocation().then(loc => { currentLocation = loc; });
+    console.log('✅ Kamera aktif');
     return true;
   } catch (err) {
     console.error('❌ Camera error:', err);
@@ -642,8 +630,8 @@ async function startCamera() {
 
 function showCameraError(err) {
   cameraError.classList.add('show');
-  let msg = 'Izinkan kamera di browser kamu untuk memulai photobooth.';
-  if (err.name === 'NotAllowedError') msg = 'Akses kamera ditolak. Klik ikon 🔒 di address bar → izinkan kamera → refresh.';
+  let msg = 'Izinkan kamera di browser kamu.';
+  if (err.name === 'NotAllowedError') msg = 'Akses kamera ditolak. Klik 🔒 di address bar → izinkan kamera → refresh.';
   else if (err.name === 'NotFoundError') msg = 'Tidak ada kamera terdeteksi.';
   else if (err.name === 'NotReadableError') msg = 'Kamera dipakai aplikasi lain.';
   else if (err.message === 'Video timeout') msg = 'Kamera tidak merespons. Coba refresh.';
@@ -666,8 +654,13 @@ function getLocation() {
 }
 
 /* ============================================================
-   🌐 PEERJS
+   🌐 PEERJS — FIXED HOST / JOIN
    ============================================================ */
+
+/**
+ * 🎯 FIX UTAMA: Room code pendek & unik
+ * Peer ID = PEER_PREFIX + code (SAMA di host & client)
+ */
 function generateRoomCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let code = '';
@@ -675,8 +668,12 @@ function generateRoomCode() {
   return code;
 }
 
-const PEER_PREFIX = 'pbooth-v4-';
+// ✅ Prefix WAJIB SAMA di host & client
+const PEER_PREFIX = 'pbx1-';
 
+/**
+ * 🎯 HOST — buat room, tunggu client connect
+ */
 async function startHost(code) {
   isHost = true;
   roomCode = code;
@@ -684,41 +681,66 @@ async function startHost(code) {
 
   updateRoomUI(code, true);
   roomStatus.className = 'room-status connecting';
+  roomStatus.classList.remove('online', 'error');
 
   if (peer) { try { peer.destroy(); } catch(e){} peer = null; }
 
+  console.log('🎯 HOST: start peer', hostPeerId);
+
   peer = new Peer(hostPeerId, {
-    debug: 1,
+    debug: 2,  // Level 2 = log verbose
     config: {
       iceServers: [
         { urls: 'stun:stun.l.google.com:19302' },
         { urls: 'stun:stun1.l.google.com:19302' },
+        { urls: 'stun:stun2.l.google.com:19302' },
         { urls: 'stun:global.stun.twilio.com:3478' }
       ]
     }
   });
 
-  peer.on('open', () => {
+  peer.on('open', (id) => {
+    console.log('✅ HOST peer open:', id);
     roomStatus.className = 'room-status online';
     roomLabel.textContent = '🎯 Menunggu teman join...';
+    peerReady = true;
     showToast('✅ Room siap! Share link ke teman');
   });
 
   peer.on('error', (err) => {
+    console.warn('⚠️ HOST error:', err.type, err);
+
     if (err.type === 'unavailable-id') {
-      setTimeout(() => startHost(generateRoomCode()), 500);
+      console.log('🔄 Room ID bentrok, generate ulang...');
+      const newCode = generateRoomCode();
+      setTimeout(() => startHost(newCode), 1000);
+    } else if (err.type === 'network') {
+      roomStatus.className = 'room-status error';
+      showToast('❌ Koneksi terputus. Cek internet.');
+    } else if (err.type === 'server-error') {
+      showToast('⚠️ Server PeerJS sibuk, coba lagi...');
     }
   });
 
+  peer.on('disconnected', () => {
+    console.log('🔌 Peer disconnected, reconnect...');
+    try { peer.reconnect(); } catch(e){}
+  });
+
+  // ✅ Terima koneksi dari client
   peer.on('connection', (incomingConn) => {
+    console.log('🎉 HOST: client connect!', incomingConn.peer);
     conn = incomingConn;
     setupHostConnection();
   });
 
+  // ✅ Terima video call dari client
   peer.on('call', (call) => {
+    console.log('📞 HOST: receive call');
     call.answer(stream);
     remoteCall = call;
     call.on('stream', (rStream) => {
+      console.log('🎥 HOST: got remote stream');
       remoteVideo.srcObject = rStream;
       remoteVideo.classList.add('active');
     });
@@ -726,84 +748,177 @@ async function startHost(code) {
       remoteVideo.srcObject = null;
       remoteVideo.classList.remove('active');
     });
+    call.on('error', (err) => console.warn('Call error:', err));
   });
 }
 
 function setupHostConnection() {
-  conn.on('open', () => onPeerConnected());
+  conn.on('open', () => {
+    console.log('✅ HOST: data channel open');
+    onPeerConnected();
+  });
+
   conn.on('data', (data) => handlePeerData(data));
-  conn.on('close', () => onPeerDisconnected());
+
+  conn.on('close', () => {
+    console.log('❌ HOST: data channel closed');
+    onPeerDisconnected();
+  });
+
+  conn.on('error', (err) => console.warn('Conn error:', err));
 }
 
+/**
+ * 🎯 CLIENT — join room host
+ */
 async function joinAsClient(code) {
   isHost = false;
   roomCode = code;
   hostPeerId = PEER_PREFIX + code;
-  clientPeerId = PEER_PREFIX + 'c-' + code + '-' + Math.random().toString(36).slice(2, 7);
+  // Client punya peer ID sendiri yang unik
+  clientPeerId = PEER_PREFIX + 'c-' + Math.random().toString(36).slice(2, 9);
 
   updateRoomUI(code, false);
   roomStatus.className = 'room-status connecting';
+  roomStatus.classList.remove('online', 'error');
 
   if (peer) { try { peer.destroy(); } catch(e){} peer = null; }
 
+  console.log('👤 CLIENT: start peer', clientPeerId, '→ target', hostPeerId);
+
   peer = new Peer(clientPeerId, {
-    debug: 1,
+    debug: 2,
     config: {
       iceServers: [
         { urls: 'stun:stun.l.google.com:19302' },
         { urls: 'stun:stun1.l.google.com:19302' },
+        { urls: 'stun:stun2.l.google.com:19302' },
         { urls: 'stun:global.stun.twilio.com:3478' }
       ]
     }
   });
 
-  peer.on('open', () => connectToHost());
+  peer.on('open', (id) => {
+    console.log('✅ CLIENT peer open:', id);
+    peerReady = true;
+    // Begitu peer ready → langsung connect ke host
+    setTimeout(connectToHost, 500);
+  });
 
   peer.on('error', (err) => {
+    console.warn('⚠️ CLIENT error:', err.type, err);
+
     if (err.type === 'peer-unavailable') {
+      console.log('❌ Room tidak ditemukan — host belum online?');
       roomStatus.className = 'room-status error';
-      showToast('❌ Room tidak ditemukan.');
       waitingTitle.textContent = 'Room tidak ditemukan';
-      waitingText.innerHTML = 'Pastikan kode <b>' + code + '</b> benar.';
+      waitingText.innerHTML = 'Pastikan host sudah buka room <b>' + code + '</b> dan masih online.';
+      // Coba lagi kalau masih ada attempt
+      if (connectionAttempts < 15) {
+        setTimeout(connectToHost, 2000);
+      }
+    } else if (err.type === 'network') {
+      roomStatus.className = 'room-status error';
+      showToast('❌ Koneksi terputus.');
+    } else if (err.type === 'server-error') {
+      showToast('⚠️ Server PeerJS sibuk, coba lagi...');
     }
+  });
+
+  peer.on('disconnected', () => {
+    console.log('🔌 Client peer disconnected, reconnect...');
+    try { peer.reconnect(); } catch(e){}
   });
 }
 
+/**
+ * 🎯 CLIENT: connect ke host
+ */
 function connectToHost() {
   connectionAttempts++;
-  if (connectionAttempts > 10) {
-    showToast('❌ Gagal terhubung');
+  console.log(`🔗 CLIENT: connect attempt #${connectionAttempts} ke ${hostPeerId}`);
+
+  if (connectionAttempts > 15) {
+    showToast('❌ Gagal terhubung setelah 15 percobaan');
+    waitingTitle.textContent = 'Gagal terhubung';
+    waitingText.innerHTML = 'Host mungkin sudah keluar atau kode salah.';
     return;
   }
 
-  if (!peer || !peer.open) { setTimeout(connectToHost, 1000); return; }
+  if (!peer || !peer.open) {
+    console.log('⏳ Peer belum ready, tunggu...');
+    setTimeout(connectToHost, 1000);
+    return;
+  }
 
-  const hostConn = peer.connect(hostPeerId, { reliable: true });
-  if (!hostConn) { setTimeout(connectToHost, 1000); return; }
+  const hostConn = peer.connect(hostPeerId, {
+    reliable: true,
+    metadata: { role: 'client', name: 'teman' }
+  });
+
+  if (!hostConn) {
+    setTimeout(connectToHost, 1000);
+    return;
+  }
 
   conn = hostConn;
 
+  // Timeout: kalau 5 detik belum open, coba lagi
+  const openTimeout = setTimeout(() => {
+    if (!connected) {
+      console.log('⏰ Timeout connect, coba lagi...');
+      try { conn.close(); } catch(e){}
+      setTimeout(connectToHost, 1000);
+    }
+  }, 5000);
+
   conn.on('open', () => {
+    clearTimeout(openTimeout);
+    console.log('✅ CLIENT: data channel open');
     onPeerConnected();
+
+    // Setelah koneksi data OK → call video ke host
     setTimeout(() => {
       if (peer && peer.open && stream) {
+        console.log('📞 CLIENT: call host...');
         remoteCall = peer.call(hostPeerId, stream);
         if (remoteCall) {
           remoteCall.on('stream', (rStream) => {
+            console.log('🎥 CLIENT: got remote stream');
             remoteVideo.srcObject = rStream;
             remoteVideo.classList.add('active');
           });
+          remoteCall.on('close', () => {
+            remoteVideo.srcObject = null;
+            remoteVideo.classList.remove('active');
+          });
+          remoteCall.on('error', (err) => console.warn('Remote call error:', err));
         }
       }
     }, 800);
   });
 
   conn.on('data', (data) => handlePeerData(data));
-  conn.on('error', () => setTimeout(connectToHost, 1500));
-  conn.on('close', () => onPeerDisconnected());
+
+  conn.on('error', (err) => {
+    console.warn('Client conn error:', err);
+    clearTimeout(openTimeout);
+    if (!connected) setTimeout(connectToHost, 2000);
+  });
+
+  conn.on('close', () => {
+    clearTimeout(openTimeout);
+    console.log('❌ CLIENT: data channel closed');
+    onPeerDisconnected();
+  });
 }
 
+/* ============================================================
+   🎯 CONNECTED / DISCONNECTED
+   ============================================================ */
 function onPeerConnected() {
+  connected = true;
+  console.log('🎉 Terhubung dengan teman!');
   roomStatus.className = 'room-status online';
   roomLabel.textContent = '✅ Terhubung dengan teman!';
   waitingOverlay.classList.remove('show');
@@ -812,6 +927,7 @@ function onPeerConnected() {
 }
 
 function onPeerDisconnected() {
+  connected = false;
   remoteVideo.srcObject = null;
   remoteVideo.classList.remove('active');
   cameraBox.classList.remove('duo');
@@ -829,50 +945,48 @@ function updateRoomUI(code, isHostRole) {
 }
 
 /* ============================================================
-   🎯 HANDLE PEER DATA — FIX GABUNG FOTO
+   🎯 HANDLE PEER DATA
    ============================================================ */
 function handlePeerData(data) {
+  console.log('📩 Terima data:', data.type, data.index !== undefined ? '#' + data.index : '');
+
   if (data.type === 'start-capture') {
-    // Client terima perintah → mulai capture
     startPhotoSession(true);
   }
   else if (data.type === 'photo-data') {
-    // Terima SATU foto dari peer → simpan
     capturedRemotePhotos.push({ dataUrl: data.dataUrl, index: data.index });
-    console.log('📸 Terima foto remote #' + data.index);
+    console.log('📸 Foto remote #' + data.index + ' tersimpan (' + capturedRemotePhotos.length + '/4)');
+    // Cek kalau sudah cukup
+    if (capturedRemotePhotos.length === 4) {
+      peerCaptureComplete = true;
+      tryBuildCombined();
+    }
   }
   else if (data.type === 'capture-complete') {
-    // 🎯 Peer selesai capture semua foto → set flag
     peerCaptureComplete = true;
     console.log('✅ Peer capture complete');
-
-    // Kalau aku juga sudah selesai → coba build
     tryBuildCombined();
   }
 }
 
-/**
- * 🎯 Fungsi cek: kalau BOTH sides complete → build
- */
 function tryBuildCombined() {
-  // Butuh: 4 foto sendiri, 4 foto teman, dan peer sudah selesai
+  console.log('🔍 tryBuildCombined:',
+    'my:', capturedPhotos.length,
+    'remote:', capturedRemotePhotos.length,
+    'peerDone:', peerCaptureComplete,
+    'myDone:', myCaptureComplete);
+
   if (capturedPhotos.length === 4 &&
       capturedRemotePhotos.length === 4 &&
       peerCaptureComplete &&
       myCaptureComplete) {
-    console.log('🎨 Build combined result!');
+    console.log('🎨 Build combined!');
     buildCombinedResult();
-  } else {
-    console.log('⏳ Menunggu...',
-      'my:', capturedPhotos.length,
-      'remote:', capturedRemotePhotos.length,
-      'peerComplete:', peerCaptureComplete,
-      'myComplete:', myCaptureComplete);
   }
 }
 
 /* ============================================================
-   🎬 CAPTURE — TIDAK MIRROR
+   🎬 CAPTURE — HASIL TIDAK MIRROR
    ============================================================ */
 function updateProgressDots(current, total, done = false) {
   const dots = progressDots.querySelectorAll('.dot');
@@ -916,11 +1030,7 @@ function playCountdownBeep(final = false) {
 
 /**
  * 🎯 CAPTURE — Hasil TIDAK MIRROR
- *
- * PENTING:
- * 1. Pakai canvas baru (offscreen) — tidak terpengaruh CSS video
- * 2. Reset transform dulu (setTransform(1,0,0,1,0,0))
- * 3. JANGAN pakai scale(-1, 1) → hasil natural
+ * Pakai canvas BARU, reset transform, draw tanpa flip
  */
 async function captureOnePhoto() {
   return new Promise((resolve) => {
@@ -929,10 +1039,8 @@ async function captureOnePhoto() {
     c.height = video.videoHeight;
     const ctx = c.getContext('2d');
 
-    // 🎯 RESET TRANSFORM — pastikan tidak ada sisa scale/translate
+    // ✅ RESET transform + draw natural (TIDAK MIRROR)
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-    // 🎯 DRAW LANGSUNG TANPA FLIP → hasil TIDAK MIRROR
     ctx.drawImage(video, 0, 0, c.width, c.height);
 
     const img = new Image();
@@ -962,20 +1070,19 @@ async function startPhotoSession(isRemote = false) {
   // Host kirim perintah ke client
   if (!isRemote && conn && conn.open && isHost) {
     conn.send({ type: 'start-capture' });
-    console.log('📤 Kirim start-capture ke client');
+    console.log('📤 Host kirim start-capture');
   }
 
-  // Capture 4 foto
   for (let i = 0; i < 4; i++) {
     updateProgressDots(i, 4);
     await runCountdown();
     const img = await captureOnePhoto();
     capturedPhotos.push(img);
 
-    // Kirim ke peer SATU PER SATU
+    // Kirim ke peer
     if (conn && conn.open) {
       conn.send({ type: 'photo-data', dataUrl: img.src, index: i });
-      console.log('📤 Kirim foto #' + i + ' ke peer');
+      console.log('📤 Kirim foto #' + i);
     }
 
     updateProgressDots(i + 1, 4, true);
@@ -985,7 +1092,7 @@ async function startPhotoSession(isRemote = false) {
   myCaptureComplete = true;
   console.log('✅ My capture complete');
 
-  // Solo mode → langsung tampilkan
+  // Solo → langsung tampilkan
   if (!conn || !conn.open) {
     setTimeout(() => {
       showResult();
@@ -996,24 +1103,24 @@ async function startPhotoSession(isRemote = false) {
     return;
   }
 
-  // Duo mode → kirim signal 'capture-complete' ke peer
+  // Duo → kirim signal complete
   if (conn && conn.open) {
     conn.send({ type: 'capture-complete' });
-    console.log('📤 Kirim capture-complete ke peer');
+    console.log('📤 Kirim capture-complete');
   }
 
-  // 🎯 Coba build — kalau belum lengkap, tunggu 5 detik lagi
+  // Cek langsung
   tryBuildCombined();
 
+  // Fallback: kalau 6 detik belum build, cek lagi
   setTimeout(() => {
     tryBuildCombined();
-    // Reset state
     setTimeout(() => {
       isCapturing = false;
       btnCapture.disabled = false;
       btnCapture.textContent = 'Mulai Foto';
-    }, 1500);
-  }, 5000);
+    }, 500);
+  }, 6000);
 }
 
 async function runCountdown() {
@@ -1059,21 +1166,15 @@ function buildCombinedResult() {
 
 function composeResult(myPhotos, friendPhotosData) {
   const frame = selectedFrame;
-  const padding = 30;
-  const gap = 10;
-  const headerHeight = 80;
-  const footerHeight = 60;
-  const labelHeight = 30;
-
+  const padding = 30, gap = 10;
+  const headerHeight = 80, footerHeight = 60, labelHeight = 30;
   const hasFriend = friendPhotosData && friendPhotosData.length >= 4;
 
   let canvasW, canvasH;
 
   if (hasFriend) {
-    // Layout duo: [KAMU | TEMAN] berdampingan × 4 baris
-    const photoW = 260;
-    const photoH = 195;
-
+    // Duo: [KAMU | TEMAN] berdampingan × 4 baris
+    const photoW = 260, photoH = 195;
     canvasW = photoW * 2 + gap + padding * 2;
     canvasH = photoH * 4 + gap * 3 + padding * 2 + headerHeight + labelHeight + footerHeight;
 
@@ -1084,7 +1185,6 @@ function composeResult(myPhotos, friendPhotosData) {
     drawBackground(ctx, frame, canvasW, canvasH);
     drawFrameDecorations(ctx, frame, canvasW, canvasH);
 
-    // Header
     ctx.fillStyle = frame.accent;
     ctx.font = 'bold 26px Poppins, sans-serif';
     ctx.textAlign = 'center';
@@ -1097,7 +1197,6 @@ function composeResult(myPhotos, friendPhotosData) {
     ctx.fillText(frame.tagline, canvasW / 2, padding + 48);
     ctx.globalAlpha = 1;
 
-    // Label kolom
     const labelY = padding + headerHeight + labelHeight / 2;
     const leftColX = padding;
     const rightColX = padding + photoW + gap;
@@ -1107,16 +1206,13 @@ function composeResult(myPhotos, friendPhotosData) {
 
     const startY = padding + headerHeight + labelHeight;
 
-    // Foto KAMU (kolom kiri)
     myPhotos.forEach((img, i) => {
       const x = leftColX;
       const y = startY + i * (photoH + gap);
       drawPhotoWithBorder(ctx, img, x, y, photoW, photoH, frame);
     });
 
-    // Foto TEMAN (kolom kanan) — sort by index untuk pastikan urutan
     const sortedFriends = [...friendPhotosData].sort((a, b) => a.index - b.index);
-
     const promises = sortedFriends.map((fd, i) => new Promise((res) => {
       const img = new Image();
       img.onload = () => {
@@ -1136,6 +1232,7 @@ function composeResult(myPhotos, friendPhotosData) {
       ctx.globalAlpha = 0.75;
       ctx.font = 'bold 13px Poppins, sans-serif';
       ctx.fillText(`${frame.icon} ${dateStr} • ${timeStr} ${frame.icon}`, canvasW / 2, canvasH - 40);
+      ctx.globalAlpha = 1;
 
       ctx.fillStyle = frame.accent;
       ctx.globalAlpha = 0.25;
@@ -1144,14 +1241,10 @@ function composeResult(myPhotos, friendPhotosData) {
       ctx.globalAlpha = 1;
 
       resultView.classList.add('show');
-      console.log('✅ Result ditampilkan (DUO)');
     });
-
   } else {
-    // Solo: 2x2 grid
-    const photoW = 340;
-    const photoH = 255;
-
+    // Solo: 2x2
+    const photoW = 340, photoH = 255;
     canvasW = photoW * 2 + gap + padding * 2;
     canvasH = photoH * 2 + gap + padding * 2 + headerHeight + footerHeight;
 
@@ -1178,8 +1271,7 @@ function composeResult(myPhotos, friendPhotosData) {
     const startY = padding + headerHeight;
 
     myPhotos.forEach((img, i) => {
-      const col = i % 2;
-      const row = Math.floor(i / 2);
+      const col = i % 2, row = Math.floor(i / 2);
       const x = startX + col * (photoW + gap);
       const y = startY + row * (photoH + gap);
       drawPhotoWithBorder(ctx, img, x, y, photoW, photoH, frame);
@@ -1200,7 +1292,6 @@ function composeResult(myPhotos, friendPhotosData) {
     ctx.globalAlpha = 1;
 
     resultView.classList.add('show');
-    console.log('✅ Result ditampilkan (SOLO)');
   }
 }
 
@@ -1237,9 +1328,7 @@ function drawBackground(ctx, frame, canvasW, canvasH) {
 }
 
 function drawColumnLabel(ctx, frame, cx, cy, text, bgColor) {
-  const pillW = 100;
-  const pillH = 26;
-
+  const pillW = 100, pillH = 26;
   ctx.save();
   ctx.fillStyle = bgColor;
   ctx.shadowColor = bgColor;
@@ -1335,7 +1424,7 @@ function downloadResult() {
   link.download = `photobooth-${Date.now()}.png`;
   link.href = resultCanvas.toDataURL('image/png');
   link.click();
-  showToast('✅ Foto berhasil didownload!');
+  showToast('✅ Foto didownload!');
 }
 
 async function shareResult() {
@@ -1343,11 +1432,11 @@ async function shareResult() {
     const blob = await new Promise(r => resultCanvas.toBlob(r, 'image/png'));
     const file = new File([blob], 'photobooth.png', { type: 'image/png' });
     if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({ files: [file], title: 'Photobooth Hasil', text: 'Lihat hasil photobooth kita! 📸' });
+      await navigator.share({ files: [file], title: 'Photobooth', text: 'Lihat hasil kita! 📸' });
     } else {
       downloadResult();
     }
-  } catch (e) { console.warn('Share failed:', e); }
+  } catch (e) {}
 }
 
 /* ============================================================
@@ -1445,7 +1534,6 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    currentMode = btn.dataset.mode;
   });
 });
 
@@ -1460,6 +1548,7 @@ window.addEventListener('load', async () => {
   const roomFromUrl = urlParams.get('room');
 
   if (roomFromUrl) {
+    // Join mode
     waitingOverlay.classList.add('show');
     waitingTitle.textContent = 'Menghubungkan...';
     waitingText.innerHTML = 'Menyambung ke room <b>' + roomFromUrl + '</b>';
@@ -1469,6 +1558,7 @@ window.addEventListener('load', async () => {
       joinAsClient(roomFromUrl);
     }
   } else {
+    // Host mode
     const ok = await startCamera();
     if (ok) {
       const code = generateRoomCode();
